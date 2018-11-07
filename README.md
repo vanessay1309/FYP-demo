@@ -19,7 +19,8 @@ $ git clone https://github.com/vanessay1309/FYP-demo
 ```
 3. You can now start working
 
-## Everytime you work on the project
+
+### Everytime you work on the project
 1. check if there is any new update
 ```
 $ git pull
@@ -37,13 +38,7 @@ $ git push origin master
 Done! We can use branching if u gonna try dangerous thing but i m not very familiar with it too so lets stick with master branch atm lol
 
 
-4. Uploading your work
-```
-$ cd myDir
-$ git clone https://github.com/vanessay1309/FYP-demo
-```
-
-## The actual project stuff
+## Web development stuff
 
 I build the thing following this:
 https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
