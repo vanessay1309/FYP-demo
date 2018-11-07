@@ -43,4 +43,10 @@ Done! We can use branching if u gonna try dangerous thing but i m not very famil
 I build the thing following this:
 https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
 
-you try try follow its set up first and see if work!
+You should be able to start deploying by:
+```
+$ cd demo_app
+$ npm start
+```
+
+See if work and try play around!
