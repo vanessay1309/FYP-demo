@@ -70,7 +70,7 @@ $ npm start dev
 ```
 
 Brief Notes
-contacts/ - for writing Solidity contracts
-migrations/ - for deploying contracts
-test/ - for writing test cases and to ran by ```truffle test```
-src/ - web resources
+- contacts:  for writing Solidity contracts
+- migrations: for deploying contracts
+- test: for writing test cases and to be ran by ```truffle test```
+- src: web resources
