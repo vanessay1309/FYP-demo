@@ -1,6 +1,7 @@
 # Project Title
-
-This is a demo version of our FYP
+This is a testing version of our FYP, consisting of two parts:
+- demo_app: an web application using MERN framework
+- decentral_app: an simple web app (HTML CSS JS) building on Ethereum
 
 ## Git stuff
 Hi, please set up git on your laptop to start working!
@@ -38,7 +39,7 @@ $ git push origin master
 Done! We can use branching if u gonna try dangerous thing but i m not very familiar with it too so lets stick with master branch atm lol
 
 
-## Web development stuff
+## demo_app
 
 I build the thing following this:
 https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
@@ -50,3 +51,26 @@ $ npm start
 ```
 
 See if work and try play around!
+
+## dencentral_app
+ref: http://www.dappuniversity.com/articles/the-ultimate-ethereum-dapp-tutorial
+(note that i changed some of the name i.e Candidate contract --> Upload contract)
+
+Please install all the dependency:
+1. NPM (you should have got it from demo_app)
+2. Truffle
+3. Ganache
+4. Metamask extension
+
+You should be able to start deploying by:
+```
+$ cd decentral_app
+$ truffle migrate --reset
+$ npm start dev
+```
+
+Brief Notes
+contacts/ - for writing Solidity contracts
+migrations/ - for deploying contracts
+test/ - for writing test cases and to ran by ```truffle test```
+src/ - web resources
