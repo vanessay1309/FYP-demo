@@ -22,11 +22,11 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("Upload.json", function(upload) {
+    $.getJSON("Gallery.json", function(gallery) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.Upload = TruffleContract(upload);
+      App.contracts.Gallery = TruffleContract(gallery);
       // Connect provider to interact with contract
-      App.contracts.Upload.setProvider(App.web3Provider);
+      App.contracts.Gallery.setProvider(App.web3Provider);
 
       return App.render();
     });
@@ -49,18 +49,23 @@ App = {
     });
 
     // Load contract data
-    App.contracts.Upload.deployed().then(function(instance) {
+    App.contracts.Gallery.deployed().then(function(instance) {
       artworksInstance = instance;
       return artworksInstance.artworksCount();
     }).then(function(artworksCount) {
       var artworksResults = $("#candidatesResults");
       artworksResults.empty();
 
-      for (var i = 1; i <= artworksCount; i++) {
-        artworksInstance.artworks(i).then(function(artwork) {
-          var id = artwork[0];
-          var name = artwork[1];
-          var voteCount = artwork[2];
+      // array storing user id and image id
+      var Arr=[[1,3],[1,2]];
+
+      for (var i = 0; i < Arr.length; i++) {
+        artworksInstance.retrieveArtworkName.call(Arr[0][0], Arr[0][1]).then(function(gallery) {
+          var id = gallery[0];
+          //var name = gallery[1];
+          var voteCount = gallery[2];
+          var name = gallery;
+
 
           // Render candidate Result
           var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"

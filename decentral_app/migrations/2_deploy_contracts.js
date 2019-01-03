@@ -1,5 +1,5 @@
-var Upload = artifacts.require("./Upload.sol");
+var Gallery = artifacts.require("./Gallery.sol");
 
 module.exports = function(deployer){
-  deployer.deploy(Upload);
+  deployer.deploy(Gallery);
 }
