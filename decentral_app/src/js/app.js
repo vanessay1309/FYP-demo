@@ -7,7 +7,7 @@ App = {
     return App.initWeb3();
   },
 
-  //web3.js a javascript library for client side interaction with blockchain
+  //initWeb3() sources from truffleframework.com
   initWeb3: function() {
     if (typeof web3 !== 'undefined') {
       // If a web3 instance is already provided by Meta Mask.
@@ -22,18 +22,18 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("Election.json", function(election) {
+    $.getJSON("Upload.json", function(upload) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.Election = TruffleContract(election);
+      App.contracts.Upload = TruffleContract(upload);
       // Connect provider to interact with contract
-      App.contracts.Election.setProvider(App.web3Provider);
+      App.contracts.Upload.setProvider(App.web3Provider);
 
       return App.render();
     });
   },
 
   render: function() {
-    var electionInstance;
+    var artworksInstance;
     var loader = $("#loader");
     var content = $("#content");
 
@@ -49,22 +49,22 @@ App = {
     });
 
     // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
+    App.contracts.Upload.deployed().then(function(instance) {
+      artworksInstance = instance;
+      return artworksInstance.artworksCount();
+    }).then(function(artworksCount) {
+      var artworksResults = $("#candidatesResults");
+      artworksResults.empty();
 
-      for (var i = 1; i <= candidatesCount; i++) {
-        electionInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
+      for (var i = 1; i <= artworksCount; i++) {
+        artworksInstance.artworks(i).then(function(artwork) {
+          var id = artwork[0];
+          var name = artwork[1];
+          var voteCount = artwork[2];
 
           // Render candidate Result
           var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
+          artworksResults.append(candidateTemplate);
         });
       }
 
