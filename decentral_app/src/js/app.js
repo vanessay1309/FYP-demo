@@ -33,7 +33,7 @@ App = {
   },
 
   render: function() {
-    var artworksInstance;
+    var galleryInstance;
     var loader = $("#loader");
     var content = $("#content");
 
@@ -50,26 +50,30 @@ App = {
 
     // Load contract data
     App.contracts.Gallery.deployed().then(function(instance) {
-      artworksInstance = instance;
-      return artworksInstance.artworksCount();
+      galleryInstance = instance;
+      return galleryInstance.artworksCount();
     }).then(function(artworksCount) {
-      var artworksResults = $("#candidatesResults");
+      var artworksResults = $("#artworkDisplay");
       artworksResults.empty();
 
-      // array storing user id and image id
+      // array storing sample user_id and image_id
       var Arr=[[1,3],[1,2]];
 
+      //Retrieve all artworks
       for (var i = 0; i < Arr.length; i++) {
-        artworksInstance.retrieveArtworkName.call(Arr[0][0], Arr[0][1]).then(function(gallery) {
-          var id = gallery[0];
-          //var name = gallery[1];
-          var voteCount = gallery[2];
-          var name = gallery;
+        var user_id = Arr[i][0];
+        var image_id = Arr[i][1];
+        galleryInstance.retrieveArtwork.call(user_id, image_id).then(function(gallery) {
+          var link = gallery[0];
+          var name = gallery[1];
+          var previous = gallery[2];
+          var future = gallery[3];
+
 
 
           // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          artworksResults.append(candidateTemplate);
+          var artworkDisplay = "<tr><th>" + link + "</th><td>" + name + "</td><td>" + previous + "</td><td>" + future + "</td></tr>"
+          artworksResults.append(artworkDisplay);
         });
       }
 
@@ -78,6 +82,10 @@ App = {
     }).catch(function(error) {
       console.warn(error);
     });
+  },
+
+  track: function(track_id){
+    alert("track work with image_id = "+track_id);
   }
 };
 
@@ -86,3 +94,17 @@ $(function() {
     App.init();
   });
 });
+//
+// function trytry(){
+//   alert('hi');
+// }
+
+
+document.getElementById('showAll').onclick=function(){
+  App.render();
+}
+
+document.getElementById('track').onclick=function(){
+  var track_id = document.getElementById('trackWork').value;
+  App.track(track_id);
+}
