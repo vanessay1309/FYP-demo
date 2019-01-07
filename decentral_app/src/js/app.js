@@ -37,14 +37,11 @@ App = {
     var loader = $("#loader");
     var all = $("#list");
     var one = $("#detail");
-    var display = function() {
-          alert("HI");
+    var buttons = $("#options");
 
-          all.hide();
-          one.show();
-        };
     loader.show();
     all.hide();
+    buttons.hide();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
@@ -75,8 +72,7 @@ App = {
           var link = gallery[3];
 
           // Render artwork result
-          var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'></th><td>" + name + "</td><td></td><td></td></tr>";
-          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
+          var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'></th><td>" + name + "</td></tr>";
           artworksResults.append(artworkDisplay);
         });
       }
@@ -92,32 +88,36 @@ App = {
   display: function(user_id, image_id){
     var all = $("#list");
     var one = $("#detail");
+    var buttons = $("#options");
 
     // Load artwork data
     App.contracts.Gallery.deployed().then(function(instance) {
       galleryInstance = instance;
       one.empty();
 
-      // array storing sample user_id and image_id
-      var Arr=[[1,3],[1,2]];
-
-      //Retrieve all artworks
-      for (var i = 0; i < Arr.length; i++) {
-        galleryInstance.retrievePrevious.call(Arr[i][0], Arr[i][1]).then(function(gallery) {
-          var obj = gallery[0]
+      //Retrieve previous artworks
+        galleryInstance.retrievePrevious.call(user_id, image_id).then(function(gallery) {
+          var obj = gallery;
+          var artworkDisplay = "<h2> Previous artworks: ";
 
           // Render artwork result
-          var artworkDisplay = "<tr><th>"+obj+"</td><td></td><td></td></tr>";
-          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
+          if (obj.length == 0) {
+            artworkDisplay = artworkDisplay + "none at the moment";
+          }else{
+            for (var i = 0; i < obj.length; i++) {
+              artworkDisplay = artworkDisplay + obj[i];
+            }
+          }
+          artworkDisplay = artworkDisplay + "</h2>";
           one.append(artworkDisplay);
         });
-      }
     }).catch(function(error) {
       console.warn(error);
     });
 
     all.hide();
     one.show();
+    buttons.show();
   }
 };
 
@@ -126,17 +126,17 @@ $(function() {
     App.init();
   });
 });
-//
-// function trytry(){
-//   alert('hi');
+
+
+// document.getElementById('showAll').onclick=function(){
+//   App.render();
 // }
 
-
-document.getElementById('showAll').onclick=function(){
+document.getElementById('back').onclick=function(){
   App.render();
 }
-
-document.getElementById('track').onclick=function(){
-  var track_id = document.getElementById('trackWork').value;
-  App.track(track_id);
-}
+//
+// document.getElementById('track').onclick=function(){
+//   var track_id = document.getElementById('trackWork').value;
+//   App.track(track_id);
+// }
