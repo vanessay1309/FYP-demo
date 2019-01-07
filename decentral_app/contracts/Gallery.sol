@@ -1,5 +1,4 @@
 pragma solidity 0.5.0;
-pragma experimental ABIEncoderV2;
 
 contract Gallery {
   // counter
@@ -20,8 +19,9 @@ contract Gallery {
 
 
   constructor() public {
-    addArtwork("daVinci","./dV.jpg", 1, 3);
-    addArtwork("MonaLisa","./mL.jpg", 1, 2);
+    addArtwork("daVinci","images/boxer.jpeg", 1, 3);
+    addArtwork("MonaLisa","images/golden-retriever.jpeg", 1, 2);
+    addPrevious(1,3,2);
   }
 
 
@@ -33,14 +33,14 @@ contract Gallery {
     gallery[hashV] = Artwork(hashV, _name, accessL, p, f);
   }
 
-  function retrieveArtwork (uint user_id, uint image_id) public returns(string memory _name, string memory accessL, uint[] memory previous, uint[] memory future) {
+  function retrieveArtwork (uint user_id, uint image_id) public returns(uint i_id, string memory _name, string memory accessL, uint[] memory previous, uint[] memory future) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return (gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].previous, gallery[hashV].future) ;
+    return (image_id, gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].previous, gallery[hashV].future) ;
   }
 
-  function retrieveArtworkName (uint user_id, uint image_id) public returns(string memory a) {
+  function retrieveArtworkInfo (uint user_id, uint image_id) public returns(uint u_id, uint i_id,string memory a, string memory accessL) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return gallery[hashV].name;
+    return (user_id, image_id, gallery[hashV].name, gallery[hashV].accessL);
   }
 
   function addPrevious (uint user_id, uint image_id, uint previous_id) public {
@@ -48,9 +48,9 @@ contract Gallery {
     gallery[hashV].previous.push(previous_id);
   }
 
-  function retrievePrevious (uint user_id, uint image_id) public {
+  function retrievePrevious (uint user_id, uint image_id) public returns(uint[] memory previous){
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].previous;
+    return gallery[hashV].previous;
   }
 
   function addFuture (uint user_id, uint image_id, uint future_id) public {
@@ -58,9 +58,9 @@ contract Gallery {
     gallery[hashV].future.push(future_id);
   }
 
-  function retrieveFuture (uint user_id, uint image_id) public {
+  function retrieveFuture (uint user_id, uint image_id) public returns (uint[] memory future) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].future;
+    return gallery[hashV].future;
   }
 
 
