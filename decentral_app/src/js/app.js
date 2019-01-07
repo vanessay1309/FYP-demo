@@ -35,10 +35,16 @@ App = {
   render: function() {
     var galleryInstance;
     var loader = $("#loader");
-    var content = $("#content");
+    var all = $("#list");
+    var one = $("#detail");
+    var display = function() {
+          alert("HI");
 
+          all.hide();
+          one.show();
+        };
     loader.show();
-    content.hide();
+    all.hide();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
@@ -47,6 +53,7 @@ App = {
         $("#accountAddress").html("Your Account: " + account);
       }
     });
+
 
     // Load contract data
     App.contracts.Gallery.deployed().then(function(instance) {
@@ -61,31 +68,56 @@ App = {
 
       //Retrieve all artworks
       for (var i = 0; i < Arr.length; i++) {
-        var user_id = Arr[i][0];
-        var image_id = Arr[i][1];
-        galleryInstance.retrieveArtwork.call(user_id, image_id).then(function(gallery) {
-          var link = gallery[0];
-          var name = gallery[1];
-          var previous = gallery[2];
-          var future = gallery[3];
+        galleryInstance.retrieveArtworkInfo.call(Arr[i][0], Arr[i][1]).then(function(gallery) {
+          var user_id = gallery[0];
+          var image_id = gallery[1];
+          var name = gallery[2];
+          var link = gallery[3];
 
-
-
-          // Render candidate Result
-          var artworkDisplay = "<tr><th>" + link + "</th><td>" + name + "</td><td>" + previous + "</td><td>" + future + "</td></tr>"
+          // Render artwork result
+          var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'></th><td>" + name + "</td><td></td><td></td></tr>";
+          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
           artworksResults.append(artworkDisplay);
         });
       }
 
       loader.hide();
-      content.show();
+      all.show();
     }).catch(function(error) {
       console.warn(error);
     });
   },
 
-  track: function(track_id){
-    alert("track work with image_id = "+track_id);
+  //Display details for a single art work
+  display: function(user_id, image_id){
+    var all = $("#list");
+    var one = $("#detail");
+
+    // Load artwork data
+    App.contracts.Gallery.deployed().then(function(instance) {
+      galleryInstance = instance;
+      one.empty();
+
+      // array storing sample user_id and image_id
+      var Arr=[[1,3],[1,2]];
+
+      //Retrieve all artworks
+      for (var i = 0; i < Arr.length; i++) {
+        galleryInstance.retrievePrevious.call(Arr[i][0], Arr[i][1]).then(function(gallery) {
+          var obj = gallery[0]
+
+          // Render artwork result
+          var artworkDisplay = "<tr><th>"+obj+"</td><td></td><td></td></tr>";
+          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
+          one.append(artworkDisplay);
+        });
+      }
+    }).catch(function(error) {
+      console.warn(error);
+    });
+
+    all.hide();
+    one.show();
   }
 };
 
