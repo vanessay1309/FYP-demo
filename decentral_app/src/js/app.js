@@ -2,6 +2,8 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
+  //Array storing user_id at Arr[image_id]
+  Mongo: [1,1],
 
   init: function() {
     return App.initWeb3();
@@ -60,12 +62,9 @@ App = {
       var artworksResults = $("#artworkDisplay");
       artworksResults.empty();
 
-      // array storing sample user_id and image_id
-      var Arr=[[1,3],[1,2]];
-
       //Retrieve all artworks
-      for (var i = 0; i < Arr.length; i++) {
-        galleryInstance.retrieveArtworkInfo.call(Arr[i][0], Arr[i][1]).then(function(gallery) {
+      for (var i = 0; i < App.Mongo.length; i++) {
+        galleryInstance.retrieveArtworkInfo.call(App.Mongo[i], i).then(function(gallery) {
           var user_id = gallery[0];
           var image_id = gallery[1];
           var name = gallery[2];
@@ -73,6 +72,7 @@ App = {
 
           // Render artwork result
           var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'></th><td>" + name + "</td></tr>";
+          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
           artworksResults.append(artworkDisplay);
         });
       }
@@ -97,18 +97,57 @@ App = {
 
       //Retrieve previous artworks
         galleryInstance.retrievePrevious.call(user_id, image_id).then(function(gallery) {
-          var obj = gallery;
+          return gallery;
+
+          // var artworkDisplay = "<h2> Previous artworks: ";
+          //
+          // // if (obj.length == 0) {
+          // //   artworkDisplay = artworkDisplay + "none at the moment";
+          // // }else{
+          // //   for (var i = 0; i < obj.length; i++) {
+          // //     //Validate and retrieve
+          // //     var i_id = obj[i];
+          // //     artworkDisplay = artworkDisplay + i_id;
+          // //
+          // //     galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(one) {
+          // //       var user_id = one[0];
+          // //       var image_id = one[1];
+          // //       var name = one[2];
+          // //       var link = one[3];
+          // //
+          // //       // Render artwork result
+          // //       artworkDisplay = artworkDisplay + "HI";
+          // //       artworkDisplay = artworkDisplay + image_id;
+          // //       //artworkDisplay = artworkDisplay + "<img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'><p>" + name + "</p>";
+          // //     });
+          // //   }
+          // // }
+          //
+          // artworkDisplay = artworkDisplay + "</h2>";
+        }).then(function(images){
+
           var artworkDisplay = "<h2> Previous artworks: ";
 
-          // Render artwork result
-          if (obj.length == 0) {
-            artworkDisplay = artworkDisplay + "none at the moment";
+          if (images.length == 0) {
+            artworkDisplay = artworkDisplay + "none at the moment </h2>";
           }else{
-            for (var i = 0; i < obj.length; i++) {
-              artworkDisplay = artworkDisplay + obj[i];
+            for (var i=0; i<images.length; i++){
+              var i_id=images[i];
+              artworkDisplay = artworkDisplay + "length=" +images.length;
+
+              galleryInstance.retrieveArtworkInfo.call(1, 0).then(function(art) {
+                // var user_id = one[0];
+                // var image_id = one[1];
+                var name = art[2];
+                // var link = one[3];
+                var wtf = "wth";
+                one.append(name);
+              });
+
+              //artworkDisplay = artworkDisplay + "length=" +images.length+"function done";
             }
+            //artworkDisplay = artworkDisplay + images[0] + " author= "+ App.Mongo[images[0]]+"</h2>";
           }
-          artworkDisplay = artworkDisplay + "</h2>";
           one.append(artworkDisplay);
         });
     }).catch(function(error) {

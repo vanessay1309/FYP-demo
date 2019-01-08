@@ -19,9 +19,9 @@ contract Gallery {
 
 
   constructor() public {
-    addArtwork("daVinci","images/boxer.jpeg", 1, 3);
-    addArtwork("MonaLisa","images/golden-retriever.jpeg", 1, 2);
-    addPrevious(1,3,2);
+    addArtwork("daVinci","images/boxer.jpeg", 1, 0);
+    addArtwork("MonaLisa","images/golden-retriever.jpeg", 1, 1);
+    addPrevious(1,0,1);
   }
 
 
