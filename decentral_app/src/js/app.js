@@ -97,15 +97,14 @@ App = {
     one.append(artInfo);
 
 
-    // Load artwork data
     App.contracts.Gallery.deployed().then(function(instance) {
       galleryInstance = instance;
 
-      //Retrieve previous artworks
-        galleryInstance.retrievePrevious.call(user_id, image_id).then(function(gallery) {
+        galleryInstance.retrieveSource.call(user_id, image_id).then(function(gallery) {
           return gallery;
         }).then(function(images){
 
+          //Retrieve previous artworks
           one.append("<div id='sources'></div>")
           var sources = $("#sources");
           sources.append("<h3> Sources: </h3>");
@@ -113,8 +112,8 @@ App = {
           if (images.length == 0) {
             sources.append("<p>none at the moment</p>");
           }else{
-            sources.append("<div class='scrollwork'></div>");
-            var scroll = $(".scrollwork");
+            sources.append("<div id='sourceItems' class='scrollwork'></div>");
+            var scroll = $("#sourceItems");
             for (var i=0; i<images.length; i++){
               var i_id=images[i];
               galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(art) {
@@ -128,8 +127,37 @@ App = {
               });
             }
           }
-          one.append(sourceInfo);
         });
+
+        galleryInstance.retrieveDerivative.call(user_id, image_id).then(function(gallery) {
+          return gallery;
+        }).then(function(images){
+
+          //Retrieve derivative work artworks
+          one.append("<div id='derivatives'></div>")
+          var derivatives = $("#derivatives");
+          derivatives.append("<h3> Derivatives: </h3>");
+
+          if (images.length == 0) {
+            derivatives.append("<p>none at the moment</p>");
+          }else{
+            derivatives.append("<div id='derItems' class='scrollwork'></div>");
+            var scroll = $("#derItems");
+            for (var i=0; i<images.length; i++){
+              var i_id=images[i];
+              galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(art) {
+                var user_id = art[0];
+                var image_id = art[1];
+                var name = art[2];
+                var link = art[3];
+
+                var displayEach = "<div class='scrollcell'><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ", \""+ name + "\", \"" + link + "\");'><div class='mid'><div class='imageText'>"+name+"</div></div></div>";
+                scroll.append(displayEach);
+              });
+            }
+          }
+        });
+
     }).catch(function(error) {
       console.warn(error);
     });
@@ -146,16 +174,6 @@ $(function() {
   });
 });
 
-
-// document.getElementById('showAll').onclick=function(){
-//   App.render();
-// }
-
 document.getElementById('back').onclick=function(){
   App.render();
 }
-//
-// document.getElementById('track').onclick=function(){
-//   var track_id = document.getElementById('trackWork').value;
-//   App.track(track_id);
-// }

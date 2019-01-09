@@ -9,8 +9,8 @@ contract Gallery {
     string name;
     string accessL;
     //store other works in form of image_id that references to Mongo
-    uint[] previous;
-    uint[] future;
+    uint[] source;
+    uint[] derivative;
   }
 
   // Read/write Artwork
@@ -23,10 +23,12 @@ contract Gallery {
     addArtwork("MonaLisa","images/golden-retriever.jpeg", 1, 1);
     addArtwork("Paris", "images/french-bulldog.jpeg", 2, 2);
     addArtwork("Boxer", "images/scottish-terrier.jpeg", 1, 3);
-    addPrevious(1,0,0);
-    addPrevious(1,0,1);
-    addPrevious(1,0,2);
-    addPrevious(1,0,3);
+    addSource(1,0,0);
+    addSource(1,0,1);
+    addSource(1,0,2);
+    addSource(1,0,3);
+    addDerivative(2,2,3);
+    addDerivative(1,1,3);
   }
 
 
@@ -38,9 +40,9 @@ contract Gallery {
     gallery[hashV] = Artwork(hashV, _name, accessL, p, f);
   }
 
-  function retrieveArtwork (uint user_id, uint image_id) public returns(uint i_id, string memory _name, string memory accessL, uint[] memory previous, uint[] memory future) {
+  function retrieveArtwork (uint user_id, uint image_id) public returns(uint i_id, string memory _name, string memory accessL, uint[] memory source, uint[] memory derivative) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return (image_id, gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].previous, gallery[hashV].future) ;
+    return (image_id, gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].source, gallery[hashV].derivative) ;
   }
 
   function retrieveArtworkInfo (uint user_id, uint image_id) public returns(uint u_id, uint i_id,string memory a, string memory accessL) {
@@ -48,24 +50,24 @@ contract Gallery {
     return (user_id, image_id, gallery[hashV].name, gallery[hashV].accessL);
   }
 
-  function addPrevious (uint user_id, uint image_id, uint previous_id) public {
+  function addSource (uint user_id, uint image_id, uint source_id) public {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].previous.push(previous_id);
+    gallery[hashV].source.push(source_id);
   }
 
-  function retrievePrevious (uint user_id, uint image_id) public returns(uint[] memory previous){
+  function retrieveSource (uint user_id, uint image_id) public returns(uint[] memory source){
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return gallery[hashV].previous;
+    return gallery[hashV].source;
   }
 
-  function addFuture (uint user_id, uint image_id, uint future_id) public {
+  function addDerivative (uint user_id, uint image_id, uint der_id) public {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].future.push(future_id);
+    gallery[hashV].derivative.push(der_id);
   }
 
-  function retrieveFuture (uint user_id, uint image_id) public returns (uint[] memory future) {
+  function retrieveDerivative (uint user_id, uint image_id) public returns (uint[] memory derivative) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return gallery[hashV].future;
+    return gallery[hashV].derivative;
   }
 
 
