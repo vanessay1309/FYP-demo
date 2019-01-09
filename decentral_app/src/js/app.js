@@ -88,42 +88,47 @@ App = {
     var all = $("#list");
     var one = $("#detail");
     var buttons = $("#options");
-    var use = name;
+
+    one.empty();
+    //sample, to be included in contract
+    var description = "sample description.Lorem ipsum dolor sit amet, quas causae neglegentur ex quo. Ei pri delectus rationibus, ex accusam delectus conclusionemque pri.";
+
+    var artInfo = "<div id='artProfile'><img src='"+link+"'><div id='text'><h2>" + name + "</h2><p>" + description + "</p></div></div>"
+    one.append(artInfo);
+
 
     // Load artwork data
     App.contracts.Gallery.deployed().then(function(instance) {
       galleryInstance = instance;
-      one.empty();
 
       //Retrieve previous artworks
         galleryInstance.retrievePrevious.call(user_id, image_id).then(function(gallery) {
           return gallery;
         }).then(function(images){
 
-          var artworkDisplay = "<h2> Previous artworks: ";
+          one.append("<div id='sources'></div>")
+          var sources = $("#sources");
+          sources.append("<h3> Sources: </h3>");
 
           if (images.length == 0) {
-            artworkDisplay = artworkDisplay + "none at the moment </h2>";
+            sources.append("<p>none at the moment</p>");
           }else{
+            sources.append("<div class='scrollwork'></div>");
+            var scroll = $(".scrollwork");
             for (var i=0; i<images.length; i++){
               var i_id=images[i];
-              artworkDisplay = artworkDisplay + "length=" +images.length;
-
               galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(art) {
                 var user_id = art[0];
                 var image_id = art[1];
                 var name = art[2];
                 var link = art[3];
 
-                var displayEach = "<img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ", \""+ name + "\", \"" + link + "\");'><p>" + name + "</p>";
-                one.append(displayEach);
+                var displayEach = "<div class='scrollcell'><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ", \""+ name + "\", \"" + link + "\");'><div class='mid'><div class='imageText'>"+name+"</div></div></div>";
+                scroll.append(displayEach);
               });
-
-              //artworkDisplay = artworkDisplay + "length=" +images.length+"function done";
             }
-            //artworkDisplay = artworkDisplay + images[0] + " author= "+ App.Mongo[images[0]]+"</h2>";
           }
-          one.append(artworkDisplay);
+          one.append(sourceInfo);
         });
     }).catch(function(error) {
       console.warn(error);

@@ -23,8 +23,10 @@ contract Gallery {
     addArtwork("MonaLisa","images/golden-retriever.jpeg", 1, 1);
     addArtwork("Paris", "images/french-bulldog.jpeg", 2, 2);
     addArtwork("Boxer", "images/scottish-terrier.jpeg", 1, 3);
+    addPrevious(1,0,0);
     addPrevious(1,0,1);
     addPrevious(1,0,2);
+    addPrevious(1,0,3);
   }
 
 
