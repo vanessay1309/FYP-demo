@@ -5,45 +5,106 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cypto gallery</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+    * {
+      font-family: "Lucida Grande";
+      letter-spacing: 2px;
+      word-spacing: 1px;
+    }
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    h1 {
+      text-transform: uppercase;
+      word-spacing: 5px;
+    }
+
+    img {
+      width: 90%;
+      height: auto;
+    }
+
+    #list {
+      display: flex;
+      align-items: center;
+      justify-content:center;
+    }
+
+    .grid {
+      display: grid;
+      margin-left: 25px;
+      grid-gap: 25px;
+      column-gap: 0%;
+      grid-template-columns: repeat(3, 450px);
+    }
+
+    .cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+    }
+    .mid {
+      transition: .5s ease;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .imageText {
+      font-size: 20px;
+      color: dark grey;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: black;
+      color: white;
+      text-align: center;
+      opacity: 0.6;
+    }
+
+    .cell:hover img{
+      opacity: 0.3;
+    }
+
+    .cell:hover .mid{
+      opacity: 1;
+    }
+
+    </style>
   </head>
   <body>
-    <div class="container" style="width: 650px;">
-      <div class="row">
-        <div class="col-lg-12">
-          <h1 class="text-center">Election Results</h1>
-          <hr/>
-          <br/>
+    <div class="w3-content" style="max-width: 1200px; padding-bottom:80px;">
+      <header class="w3-panel w3-center w3-opacity" style="padding:10px 16px">
+          <h1 class="text-center">Crypto Gallery</h1>
+          <hr>
+      </header>
           <div id="loader">
             <p class="text-center">Loading...</p>
           </div>
-          <div id="list" style="display: none;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Access Link</th>
-                  <th scope="col">Name</th>
-                </tr>
-              </thead>
-              <tbody id="artworkDisplay">
-              </tbody>
-            </table>
-            <hr/>
-            <p id="accountAddress" class="text-center"></p>
+          <div id="list">
+            <div class="grid">
+            </div>
           </div>
           <div id="detail" style="display: none;">
           </div>
           <div id="options">
             <input id="back" type="button" value="back" style="display: inline;"/>
-            <!-- <input id="showAll" type="button" value="show all" style="display: inline;"/>
-            <input id="trackWork" type="text"/>
-            <input id="track" type="submit" value="Track"/> -->
         </div>
       </div>
-    </div>
-
+      <div class="footer">
+        <p id="accountAddress" class="text-center"></p>
+      </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -2,8 +2,8 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
-  //Array storing user_id at Arr[image_id]
-  Mongo: [1,1],
+  //Array storing user_id at Mongo[image_id]
+  Mongo: [1,1,2,1],
 
   init: function() {
     return App.initWeb3();
@@ -53,13 +53,12 @@ App = {
       }
     });
 
-
     // Load contract data
     App.contracts.Gallery.deployed().then(function(instance) {
       galleryInstance = instance;
       return galleryInstance.artworksCount();
     }).then(function(artworksCount) {
-      var artworksResults = $("#artworkDisplay");
+      var artworksResults = $(".grid");
       artworksResults.empty();
 
       //Retrieve all artworks
@@ -70,14 +69,14 @@ App = {
           var name = gallery[2];
           var link = gallery[3];
 
-          // Render artwork result
-          var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'></th><td>" + name + "</td></tr>";
-          //var artworkDisplay = "<tr><th><img id='artwork' src='" + link + "></th><td>" + name + "</td><td></td><td></td></tr>";
+          var artworksResults = $(".grid");
+          var artworkDisplay = "<div class='cell'><img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ", \""+ name + "\", \"" + link + "\");'><div class='mid'><div class='imageText'>"+name+"</div></div></div>" ;
           artworksResults.append(artworkDisplay);
         });
       }
 
       loader.hide();
+      one.hide();
       all.show();
     }).catch(function(error) {
       console.warn(error);
@@ -85,10 +84,11 @@ App = {
   },
 
   //Display details for a single art work
-  display: function(user_id, image_id){
+  display: function(user_id, image_id, name, link){
     var all = $("#list");
     var one = $("#detail");
     var buttons = $("#options");
+    var use = name;
 
     // Load artwork data
     App.contracts.Gallery.deployed().then(function(instance) {
@@ -98,32 +98,6 @@ App = {
       //Retrieve previous artworks
         galleryInstance.retrievePrevious.call(user_id, image_id).then(function(gallery) {
           return gallery;
-
-          // var artworkDisplay = "<h2> Previous artworks: ";
-          //
-          // // if (obj.length == 0) {
-          // //   artworkDisplay = artworkDisplay + "none at the moment";
-          // // }else{
-          // //   for (var i = 0; i < obj.length; i++) {
-          // //     //Validate and retrieve
-          // //     var i_id = obj[i];
-          // //     artworkDisplay = artworkDisplay + i_id;
-          // //
-          // //     galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(one) {
-          // //       var user_id = one[0];
-          // //       var image_id = one[1];
-          // //       var name = one[2];
-          // //       var link = one[3];
-          // //
-          // //       // Render artwork result
-          // //       artworkDisplay = artworkDisplay + "HI";
-          // //       artworkDisplay = artworkDisplay + image_id;
-          // //       //artworkDisplay = artworkDisplay + "<img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ");'><p>" + name + "</p>";
-          // //     });
-          // //   }
-          // // }
-          //
-          // artworkDisplay = artworkDisplay + "</h2>";
         }).then(function(images){
 
           var artworkDisplay = "<h2> Previous artworks: ";
@@ -135,13 +109,14 @@ App = {
               var i_id=images[i];
               artworkDisplay = artworkDisplay + "length=" +images.length;
 
-              galleryInstance.retrieveArtworkInfo.call(1, 0).then(function(art) {
-                // var user_id = one[0];
-                // var image_id = one[1];
+              galleryInstance.retrieveArtworkInfo.call(App.Mongo[i_id], i_id).then(function(art) {
+                var user_id = art[0];
+                var image_id = art[1];
                 var name = art[2];
-                // var link = one[3];
-                var wtf = "wth";
-                one.append(name);
+                var link = art[3];
+
+                var displayEach = "<img id='artwork' src='" + link + "' onClick='return App.display("+ user_id + "," + image_id + ", \""+ name + "\", \"" + link + "\");'><p>" + name + "</p>";
+                one.append(displayEach);
               });
 
               //artworkDisplay = artworkDisplay + "length=" +images.length+"function done";
