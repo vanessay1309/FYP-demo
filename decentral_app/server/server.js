@@ -19,7 +19,7 @@ err => { console.log('There is problem while connecting database ' + err) }
 );
 
 // All the express routes
-const employeeRoutes = require('../routes/User.route');
+const userRoutes = require('../routes/User.route');
 
 // Conver incoming data to JSON format
 app.use(bodyParser.json());
@@ -31,7 +31,7 @@ app.use(cors());
 const port = process.env.PORT || 4000;
 
 // Routes Configuration
-app.use('/employees', employeeRoutes);
+app.use('/users', userRoutes);
 
 // Staring our express server
 const server = app.listen(port, function () {

@@ -3,69 +3,69 @@ const express = require('express');
 
 // Using express and routes
 const app = express();
-const employeeRoute = express.Router();
+const userRoute = express.Router();
 
-// Employee module which is required and imported
-let employeeModel = require('../Model/User');
+// User module which is required and imported
+let UserModel = require('../model/User');
 
-// To Get List Of Employees
-employeeRoute.route('/').get(function (req, res) {
-employeeModel.find(function (err, employee) {
+// To Get List Of Users
+userRoute.route('/').get(function (req, res) {
+UserModel.find(function (err, User) {
 if (err) {
 console.log(err);
 }
 else {
-res.json(employee);
+res.json(User);
 }
 });
 });
 
-// To Add New Employee
-employeeRoute.route('/addEmployee').post(function (req, res) {
-let employee = new employeeModel(req.body);
-employee.save()
+// To Add New User
+userRoute.route('/addUser').post(function (req, res) {
+let User = new UserModel(req.body);
+User.save()
 .then(game => {
-res.status(200).json({ 'employee': 'Employee Added Successfully' });
+res.status(200).json({ 'User': 'User Added Successfully' });
 })
 .catch(err => {
 res.status(400).send("Something Went Wrong");
 });
 });
 
-// To Get Employee Details By Employee ID
-employeeRoute.route('/editEmployee/:id').get(function (req, res) {
+// To Get User Details By User ID
+userRoute.route('/editUser/:id').get(function (req, res) {
 let id = req.params.id;
-employeeModel.findById(id, function (err, employee) {
-res.json(employee);
+UserModel.findById(id, function (err, User) {
+res.json(User);
 });
 });
 
-// To Update The Employee Details
-employeeRoute.route('/updateEmployee/:id').post(function (req, res) {
-employeeModel.findById(req.params.id, function (err, employee) {
-if (!employee)
-return next(new Error('Unable To Find Employee With This Id'));
+// To Update The User Details
+userRoute.route('/updateUser/:id').post(function (req, res) {
+UserModel.findById(req.params.id, function (err, User) {
+if (!User)
+return next(new Error('Unable To Find User With This Id'));
 else {
-employee.firstName = req.body.firstName;
-employee.lastName = req.body.lastName;
-employee.email = req.body.email;
+User.firstName = req.body.firstName;
+User.lastName = req.body.lastName;
+User.email = req.body.email;
 
-employee.save().then(emp => {
-res.json('Employee Updated Successfully');
+User.save().then(emp => {
+res.json('User Updated Successfully');
 })
 .catch(err => {
-res.status(400).send("Unable To Update Employee");
+res.status(400).send("Unable To Update User");
 });
 }
 });
 });
 
-// To Delete The Employee
-employeeRoute.route('/deleteEmployee/:id').get(function (req, res) {
-employeeModel.findByIdAndRemove({ _id: req.params.id }, function (err, employee) {
+// To Delete The User
+userRoute.route('/deleteUser/:id').get(function (req, res) {
+UserModel.findByIdAndRemove({ _id: req.params.id }, function (err, User) {
 if (err) res.json(err);
-else res.json('Employee Deleted Successfully');
+else res.json('User Deleted Successfully');
 });
 });
 
-module.exports = employeeRoute;
+module.exports = userRoute;
