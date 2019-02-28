@@ -40,37 +40,17 @@ Done! We can use branching if u gonna try dangerous thing but i m not very famil
 
 
 ## demo_app
+ref: 2.Design & analysis/Second Deliverable/Demo development notes
 
-I build the thing following this:
-https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
-
-You should be able to start deploying by:
-```
-$ cd demo_app
-$ npm start
-```
-
-See if work and try play around!
 
 ## dencentral_app
-ref: http://www.dappuniversity.com/articles/the-ultimate-ethereum-dapp-tutorial
-(note that i changed some of the name i.e Candidate contract --> Upload contract)
+ref: implementation notes
 
-Please install all the dependency:
-1. NPM (you should have got it from demo_app)
-2. Truffle
-3. Ganache
-4. Metamask extension
-
-You should be able to start deploying by:
+Stat the app by:
 ```
 $ cd decentral_app
 $ truffle migrate --reset
-$ npm start dev
+$ cd client
+$ npm start
+$ npm run dev
 ```
-
-Brief Notes
-- contacts:  for writing Solidity contracts
-- migrations: for deploying contracts
-- test: for writing test cases and to be ran by ```truffle test```
-- src: web resources
