@@ -35,4 +35,5 @@ const getWeb3 = () =>
     });
   });
 
+
 export default getWeb3;

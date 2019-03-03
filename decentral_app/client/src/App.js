@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import GalleryContract from "./contracts/Gallery.json";
-import getWeb3 from "./utils/getWeb3";
+import { getWeb3 } from "./utils/getWeb3";
+
 
 import "./App.css";
 
@@ -36,6 +37,7 @@ class App extends Component {
   };
 
   runExample = async () => {
+    // temporary comment any code that refers to galleryContract.state
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
@@ -48,9 +50,9 @@ class App extends Component {
     this.setState({ name: response[2] });  };
 
   render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
+    // if (!galleryContract.state.web3) {
+    //   return <div>Loading Web3, accounts, and contract...</div>;
+    // }
     return (
       <div className="App">
         <h1>Good to Go!</h1>
@@ -63,7 +65,7 @@ class App extends Component {
         <p>
           Try changing the value stored on <strong>line 45</strong> of App.js.
         </p>
-        <div>The name of artwork is: {this.state.name}</div>
+         <div>The name of artwork is: {this.state.name}</div>
       </div>
     );
   }
