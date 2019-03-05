@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import GalleryContract from "./contracts/Gallery.json";
-import { getWeb3 } from "./utils/getWeb3";
+import getWeb3 from "./utils/getWeb3";
 
 
 import "./App.css";
