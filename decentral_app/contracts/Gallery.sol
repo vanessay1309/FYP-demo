@@ -25,7 +25,8 @@ contract Gallery {
     addArtwork("Boxer", "images/scottish-terrier.jpeg", 1, 3); */
     addArtwork("work by tessa", "images/scottish-terrier.jpeg", "5c765815c8dd530a9f247b4b", "5c76586ec8dd530a9f247b4e");
     addArtwork("work by alan", "images/scottish-terrier.jpeg", "5c765823c8dd530a9f247b4c", "5c76588dc8dd530a9f247b4f");
-    addArtwork("another by Tessa", "images/scottish-terrier.jpeg", "5c765815c8dd530a9f247b4b", "5c7d2969a120220604f1b6ef");
+    /* addArtwork("another by Tessa", "images/scottish-terrier.jpeg", "5c765815c8dd530a9f247b4b", "5c7d2969a120220604f1b6ef");
+    addArtwork("another by Tessa", "hihi", "5c165815c8dd530a9f247b4b", "5c7d2960a120220604f1b6ef"); */
     /* addSource(1,0,1);
     addSource(1,0,2);
     addSource(1,0,3);

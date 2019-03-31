@@ -41,10 +41,10 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.addSource(1,0,0).send({ from: accounts[0] });
+    await contract.methods.addArtwork("abc", "abc","5c765815c8dd530a9f247b2b","5c76586ec8dd530a9f247b4e").send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.retrieveArtworkInfo(1,0).call();
+    const response = await contract.methods.retrieveArtworkInfo("5c765815c8dd530a9f247b4b", "5c76586ec8dd530a9f247b4e").call();
 
     // Update state with the result.
     this.setState({ name: response[2] });  };
