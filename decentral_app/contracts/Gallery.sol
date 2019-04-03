@@ -60,7 +60,7 @@ contract Gallery {
     return (u_id, i_id, gallery[hashV].name, gallery[hashV].access, gallery[hashV].source, gallery[hashV].derivative);
   }
 
-  function addSource (bytes32 u_id, bytes32 i_id, bytes32 s_id) public {
+  function addSource (bytes32 u_id, bytes32 i_id, lsbytes32 s_id) public {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
     gallery[hashV].source.push(s_id);
   }
