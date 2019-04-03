@@ -100,6 +100,32 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
 
   //TODO CLOUD UPLOAD here, return access token
   let accessL = "token"
+  //
+  // //cloudinary widget call
+  // let widget = cloudinary.createUploadWidget({
+  //   cloudName: 'fyp18003',
+  //   uploadPreset: 'tt3uhkl0',
+  //   sources: ['local', 'url'],
+  // }, (error, result) => {
+  //
+  //   if (result.event === "success") {
+  //
+  //     window.alert(result.info.secure_url);
+  //     accessL = result.info.secure_url;
+  //     public_id = result.public_id;
+  //    signature = result.signature;
+  //    delete function:
+  //    authentication
+  //
+  //    cloudinary.v2.uploader.destroy(public_id, options, callback);
+  //
+  // }
+  // });
+  //   widget.open();
+  //delete artwork call
+
+ // cloudinary.v2.uploader.destroy("#public id", 
+  function(error, result) {console.log(result, error) });
 
   //Call back to mongo
   Artwork.save(function(err, artwork){
