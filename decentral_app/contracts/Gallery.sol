@@ -48,9 +48,13 @@ contract Gallery {
   //   return (image_id, gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].source, gallery[hashV].derivative) ;
   // }
 
-  function retrieveArtworkInfo (string memory user_id, string memory image_id) public returns(string memory u_id, string memory i_id,string memory a, string memory accessL) {
+  /* function retrieveArtworkInfo (string memory user_id, string memory image_id) public returns(string memory u_id, string memory i_id,string memory a, string memory accessL) {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
     return (user_id, image_id, gallery[hashV].name, gallery[hashV].accessL);
+  } */
+  function retrieveArtworkInfo (string memory u_id, string memory i_id) public returns(string memory, string memory,string memory, string memory) {
+    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+    return (u_id, i_id, gallery[hashV].name, gallery[hashV].accessL);
   }
 
   /* function addSource (string memory user_id, string memory image_id, string memory source_id) public {

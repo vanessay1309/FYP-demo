@@ -1,6 +1,7 @@
 // Importing important packages
 const express = require('express');
 const Web3 = require('web3');
+const obj = require('lodash/fp/object')
 const GalleryContract =  require('../src/contracts/Gallery.json');
 
 // Using express and routes
@@ -36,19 +37,23 @@ const componentDidMount = async function() {
 componentDidMount();
 
 // To Get List Of Artworks from Ethereum
-// TODO decide logic to get front page
 artworkRoute.route('/').get(function (req, res) {
-  //Find all artworks by an author and return their id
-  ArtworkModel.find(function(err, Artwork){
-    if (err){
-      console.log("[retrieveAll] Mongo retrieve artworks error: "+err);
-      res.json("Failed to retrieve artwork. Please try again");
+
+  //Find all artworks in Mongo
+  ArtworkModel.find(function(error, Artwork){
+    if (error){
+      console.log("[retrieveAll] Mongo retrieve artworks error: "+error);
+      res.status(500).json({message: error.toString()});
     }else{
       console.log("[retrieveAll] retrieved from Mongo successfully, now retrieve from Ethereum")
-      const callInstance = async function() {
 
+      let Json = {
+        Artworks:[]
+      };
+
+      // Retreiev artworks from Ethereum
+      const callInstance = async function() {
           try {
-            res.write("[")
               for (var i=0; i< Artwork.length; i++){
                 let tempI = JSON.stringify(Artwork[i]._id);
                 let image_id = tempI.replace(/['"]+/g,'');
@@ -56,24 +61,23 @@ artworkRoute.route('/').get(function (req, res) {
                 let author_id = tempA.replace(/['"]+/g,'');
 
                 const response = await instance.methods.retrieveArtworkInfo(author_id, image_id).call();
-                let result = JSON.stringify(response);
-                res.write(result);
-
-                if (i != (Artwork.length-1)){
-                  res.write(',')
+                // if this is a valid artwork uploaded to Ethereum
+                if (response[2] != ""){
+                  let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+                  Json.Artworks.push(result);
                 }
               }
-            res.write("]")
             console.log("[retrieveAll] retrieved from Ethereum successfully, return to client")
-            return res.end();
+            res.json(Json)
 
           } catch (error) {
             // Catch any errors for any of the above operations.
-            // res.json("Failed to load web3, accounts, or contract. Check console for details.");
-            console.log("[retrieveAll] Ethereum retrieve artwork error: "+err);
+            console.log("[retrieveAll] Ethereum retrieve artwork error: "+error);
+            res.status(500).json({message: error.toString()});
           }
         };
       callInstance();
+
     }
   });
 });
@@ -81,7 +85,7 @@ artworkRoute.route('/').get(function (req, res) {
 // To Get List Of Artworks from mongo (temp function)
 artworkRoute.route('/mongo').get(function (req, res) {
   ArtworkModel.find(function (err, Artwork) {
-    if (err) {
+    if (error) {
         console.log("[mongo retrieveAll] Mongo retrieve error"+error);
       } else {
         res.json(Artwork);
@@ -91,12 +95,9 @@ artworkRoute.route('/mongo').get(function (req, res) {
 
 // To Upload artwork
 artworkRoute.route('/uploadArtwork').post(function (req, res) {
-  // set all variables to save
+
   let author_id = req.body.author
   let name = req.body.name
-
-  // only stroing author_id (& name for testing) to MongoDB
-  let Artwork = new ArtworkModel({author: author_id, name: name})
 
   //TODO CLOUD UPLOAD here, return access token
   let accessL = "token"
@@ -124,17 +125,19 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
   //   widget.open();
   //delete artwork call
 
- // cloudinary.v2.uploader.destroy("#public id", 
-  function(error, result) {console.log(result, error) });
+ // cloudinary.v2.uploader.destroy("#public id",
+  // function(error, result) {console.log(result, error) });
+
+  // only stroing author_id (& name for testing) to MongoDB
+  let Artwork = new ArtworkModel({author: author_id, name: name})
 
   //Call back to mongo
-  Artwork.save(function(err, artwork){
-    if (err){
-      console.log("[uploadArtwork] Mongo saving error: "+err);
+  Artwork.save(function(error, artwork){
+    if (error){
+      console.log("[uploadArtwork] mongo saving error: "+error);
+      res.status(500).json({message: error.toString()});
     }else{
       console.log("[uploadArtwork] saved to mongo successfully, now save to block")
-      let temp = JSON.stringify(artwork._id);
-      let image_id = temp.replace(/['"]+/g,'');
 
       // Call back to Ethereum
       const callInstance = async function() {
@@ -143,14 +146,16 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
               let temp = JSON.stringify(artwork._id);
               let image_id = temp.replace(/['"]+/g,'');
 
-              await instance.methods.addArtwork(name, accessL.replace(/['"]+/g,''), author_id, image_id).call();
+              console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
+              await instance.methods.addArtwork(name, accessL, author_id, image_id).send({ from: accounts[0], gas: 300000 });
+
               console.log("[uploadArtwork] saved to contract successfully, return to client")
-              res.status(200).json({ 'Artwork': 'Artwork Added Successfully' });
+              res.status(200).json({message:"Success"});
 
           } catch (error) {
             // Catch any errors for any of the above operations.
-            // res.json("Failed to load web3, accounts, or contract. Check console for details.");
-            console.error("[uploadArtwork] Contract saving error: "+error);
+            console.error("[uploadArtwork] Contract saving "+error);
+            res.status(500).json({message: error.toString()});
           }
         };
       callInstance();
@@ -159,37 +164,41 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
 });
 
 //Get all Artworks particular author
-artworkRoute.route('/allBy/:author').get(function (req, res) {
+artworkRoute.route('/byAuthor/:author').get(function (req, res) {
   let author = req.params.author;
 
   //Find all artworks by an author and return their id
-  ArtworkModel.find({'author': author},'_id', function(err, id){
-    if (err){
-      console.log(err);
+  ArtworkModel.find({'author': author},'_id', function(error, id){
+    if (error){
+      console.log("[getByAuthor] getting from mongo artworks by "+author+": "+error);
+      res.status(500).json({message: error.toString()});
     }else{
-      console.log("[byAuthor] retrieved from Mongo successfully, now retrieve from Ethereum")
-      const callInstance = async function() {
+      console.log("[getByAuthor] retrieved from Mongo successfully, now retrieve from Ethereum")
+      let Json = {
+        Artworks:[]
+      };
 
+      const callInstance = async function() {
           try {
-            res.write("[")
               for (var i=0; i< id.length; i++){
                 let temp = JSON.stringify(id[i]._id);
                 let image = temp.replace(/['"]+/g,'');
+
                 const response = await instance.methods.retrieveArtworkInfo(author, image).call();
-                let result = JSON.stringify(response);
-                res.write(result);
-                if (i != (id.length-1)){
-                  res.write(',')
+                //ignore artworks with no name (failed upload to Ethereum but successed in Mongo)
+                if (response[2] != ""){
+                  let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+                  Json.Artworks.push(result);
                 }
               }
-            res.write("]")
-            console.log("[byAuthor] retrieved from Ethereum successfully, return to client")
-            return res.end();
+
+            console.log("[getByAuthor] retrieved from Ethereum successfully, return to client")
+            res.json(Json);
 
           } catch (error) {
             // Catch any errors for any of the above operations.
-            // res.json("Failed to load web3, accounts, or contract. Check console for details.");
-            console.log("[byAuthor] Ethereum retrieve artwork error: "+err);
+            console.log("[getByAuthor] ethereum retrieves artworks by "+author+" failed: "+error);
+            res.status(500).json({message: error.toString()});
           }
         };
       callInstance();
@@ -198,24 +207,21 @@ artworkRoute.route('/allBy/:author').get(function (req, res) {
 });
 
 //Get an Artwork Through Ethereum
-artworkRoute.route('/byE/:author/:image').get(function (req, res) {
-  let authorId = req.params.author;
-  let imageId = req.params.image;
+artworkRoute.route('/details/:author/:image').get(function (req, res) {
+  let author = req.params.author;
+  let image = req.params.image;
 
   const callInstance = async function() {
     try {
-      const response = await instance.methods.retrieveArtworkInfo(authorId,imageId).call();
-
-      // Update state with the result.
-      res.json(response);
+      const response = await instance.methods.retrieveArtworkInfo(author,image).call();
+      let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+      res.json(result);
     } catch (error) {
       // Catch any errors for any of the above operations.
-      res.json("Failed to retrieve artwork. Please try again");
-      console.error(error);
+      console.log("[details] getting from Ethereum artworks "+image+": "+error);
+      res.status(500).json({message: error.toString()});
     }
   };
-  //
-  // componentDidMount();
   callInstance();
 });
 

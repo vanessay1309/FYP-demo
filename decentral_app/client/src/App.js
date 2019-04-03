@@ -51,6 +51,7 @@ class App extends Component {
 
     // Update state with the result.
     this.setState({ name: response[2] });  };
+    console.print("state: "+this.state)
 
   render() {
     // if (!galleryContract.state.web3) {
@@ -97,7 +98,7 @@ class App extends Component {
             </div>
 
           <div id="uploadContent">
-        
+
             <p className="text-left">Upload Content</p>
             <button className="text-left" >Upload</button>
           </div>
