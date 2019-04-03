@@ -60,11 +60,12 @@ contract Gallery {
     return (u_id, i_id, gallery[hashV].name, gallery[hashV].access, gallery[hashV].source, gallery[hashV].derivative);
   }
 
-  /* function addSource (string memory user_id, string memory image_id, string memory source_id) public {
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].source.push(source_id);
+  function addSource (bytes32 u_id, bytes32 i_id, bytes32 s_id) public {
+    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+    gallery[hashV].source.push(s_id);
   }
 
+/*
   function retrieveSource (string memory user_id, string memory image_id) public returns(uint[] memory source){
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
     return gallery[hashV].source;
