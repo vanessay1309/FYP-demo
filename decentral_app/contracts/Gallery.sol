@@ -7,10 +7,10 @@ contract Gallery {
   struct Artwork {
     bytes32 hashValue;
     string name;
-    string accessL;
+    string access;
     //store other works in form of image_id that references to Mongo
-    uint[] source;
-    uint[] derivative;
+    bytes32[] source;
+    bytes32[] derivative;
   }
 
   // Read/write Artwork
@@ -35,26 +35,29 @@ contract Gallery {
   }
 
 
-  function addArtwork (string memory _name, string memory accessL, string memory user_id, string memory image_id) public {
+  /* function addArtwork (string memory _name, string memory access, string memory user_id, string memory image_id) public {
     artworksCount ++;
-    uint[] memory p;
-    uint[] memory f;
+    string[] memory p;
+    string[] memory f;
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV] = Artwork(hashV, _name, accessL, p, f);
+    gallery[hashV] = Artwork(hashV, _name, access, p, f);
+  } */
+  function addArtwork (string memory _name, string memory access, bytes32 user_id, bytes32 image_id) public {
+    artworksCount ++;
+    bytes32[] memory p;
+    bytes32[] memory f;
+    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
+    gallery[hashV] = Artwork(hashV, _name, access, p, f);
   }
 
-  // function retrieveArtwork (string memory user_id, string memory image_id) public returns(string memory i_id, string memory _name, string memory accessL, uint[] memory source, uint[] memory derivative) {
-  //   bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-  //   return (image_id, gallery[hashV].name, gallery[hashV].accessL, gallery[hashV].source, gallery[hashV].derivative) ;
-  // }
-
-  /* function retrieveArtworkInfo (string memory user_id, string memory image_id) public returns(string memory u_id, string memory i_id,string memory a, string memory accessL) {
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return (user_id, image_id, gallery[hashV].name, gallery[hashV].accessL);
-  } */
-  function retrieveArtworkInfo (string memory u_id, string memory i_id) public returns(string memory, string memory,string memory, string memory) {
+  function retrieveArtwork (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory) {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
-    return (u_id, i_id, gallery[hashV].name, gallery[hashV].accessL);
+    return (u_id, i_id, gallery[hashV].name, gallery[hashV].access);
+  }
+
+  function retrieveArtworkInfo (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory, bytes32[] memory, bytes32[] memory) {
+    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+    return (u_id, i_id, gallery[hashV].name, gallery[hashV].access, gallery[hashV].source, gallery[hashV].derivative);
   }
 
   /* function addSource (string memory user_id, string memory image_id, string memory source_id) public {

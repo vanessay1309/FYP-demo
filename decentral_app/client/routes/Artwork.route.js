@@ -55,15 +55,16 @@ artworkRoute.route('/').get(function (req, res) {
       const callInstance = async function() {
           try {
               for (var i=0; i< Artwork.length; i++){
+                // parse string into bytes32 for contract
                 let tempI = JSON.stringify(Artwork[i]._id);
-                let image_id = tempI.replace(/['"]+/g,'');
+                let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
                 let tempA = JSON.stringify(Artwork[i].author);
-                let author_id = tempA.replace(/['"]+/g,'');
+                let author_id = web3.utils.asciiToHex(tempA.replace(/['"]+/g,''), 32);
 
-                const response = await instance.methods.retrieveArtworkInfo(author_id, image_id).call();
+                const response = await instance.methods.retrieveArtwork(author_id, image_id).call();
                 // if this is a valid artwork uploaded to Ethereum
                 if (response[2] != ""){
-                  let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+                  let result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'access': response[3]};
                   Json.Artworks.push(result);
                 }
               }
@@ -96,7 +97,8 @@ artworkRoute.route('/mongo').get(function (req, res) {
 // To Upload artwork
 artworkRoute.route('/uploadArtwork').post(function (req, res) {
 
-  let author_id = req.body.author
+  // let author_id = req.body.author
+  let author = req.body.author
   let name = req.body.name
 
   //TODO CLOUD UPLOAD here, return access token
@@ -129,7 +131,7 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
   // function(error, result) {console.log(result, error) });
 
   // only stroing author_id (& name for testing) to MongoDB
-  let Artwork = new ArtworkModel({author: author_id, name: name})
+  let Artwork = new ArtworkModel({author: author, name: name})
 
   //Call back to mongo
   Artwork.save(function(error, artwork){
@@ -142,9 +144,11 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
       // Call back to Ethereum
       const callInstance = async function() {
           try {
-              // retrieve and parse image_id from newly save model in Mongo
-              let temp = JSON.stringify(artwork._id);
-              let image_id = temp.replace(/['"]+/g,'');
+              // parse id from string to bytes32 for contract
+              let tempA = JSON.stringify(artwork.author);
+              let author_id = web3.utils.asciiToHex(tempA.replace(/['"]+/g,''), 32);
+              let tempI = JSON.stringify(artwork._id);
+              let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
 
               console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
               await instance.methods.addArtwork(name, accessL, author_id, image_id).send({ from: accounts[0], gas: 300000 });
@@ -163,7 +167,7 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
   });
 });
 
-//Get all Artworks particular author
+//Get all Artworks by a given author
 artworkRoute.route('/byAuthor/:author').get(function (req, res) {
   let author = req.params.author;
 
@@ -181,17 +185,18 @@ artworkRoute.route('/byAuthor/:author').get(function (req, res) {
       const callInstance = async function() {
           try {
               for (var i=0; i< id.length; i++){
-                let temp = JSON.stringify(id[i]._id);
-                let image = temp.replace(/['"]+/g,'');
+                // parse id from string to bytes32 for contract
+                let tempI = JSON.stringify(id[i]._id);
+                let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
+                let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
 
-                const response = await instance.methods.retrieveArtworkInfo(author, image).call();
+                const response = await instance.methods.retrieveArtwork(author_id, image_id).call();
                 //ignore artworks with no name (failed upload to Ethereum but successed in Mongo)
                 if (response[2] != ""){
-                  let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+                  let result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'access': response[3]};
                   Json.Artworks.push(result);
                 }
               }
-
             console.log("[getByAuthor] retrieved from Ethereum successfully, return to client")
             res.json(Json);
 
@@ -213,8 +218,12 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
 
   const callInstance = async function() {
     try {
-      const response = await instance.methods.retrieveArtworkInfo(author,image).call();
-      let result = {'author_id': response[0], 'image_id': response[1],'name': response[2], 'access': response[3]}
+      // parse id from string to bytes32 for contract
+      let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
+      let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
+
+      const response = await instance.methods.retrieveArtworkInfo(author_id, image_id).call();
+      let result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'access': response[3], 'source': response[4], 'derivative': response[5]};
       res.json(result);
     } catch (error) {
       // Catch any errors for any of the above operations.
