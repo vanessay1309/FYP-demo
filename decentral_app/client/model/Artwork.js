@@ -5,11 +5,13 @@ var ObjectId = Schema.ObjectId;
 // List of columns for Artwork schema
 let Artwork = new Schema(
   {
-    author: {
+    author_id: {
       type: ObjectId
     },
-    //temp, for easy recognition before connecting to ethereum
     name: {
+      type: String
+    },
+    author: {
       type: String
     }
   },{

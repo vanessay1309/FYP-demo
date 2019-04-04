@@ -4,13 +4,16 @@ const Schema = mongoose.Schema;
 // List of columns for User schema
 let User = new Schema(
   {
-    firstName: {
-      type: String
-    },
-    lastName: {
+      name: {
         type: String
       },
-    email: {
+      account: {
+          type: String
+      },
+      bio: {
+          type: String
+      },
+      avatar: {
         type: String
       }
     },{
