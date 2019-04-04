@@ -34,14 +34,6 @@ contract Gallery {
     addDerivative(1,1,3); */
   }
 
-
-  /* function addArtwork (string memory _name, string memory access, string memory user_id, string memory image_id) public {
-    artworksCount ++;
-    string[] memory p;
-    string[] memory f;
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV] = Artwork(hashV, _name, access, p, f);
-  } */
   function addArtwork (string memory _name, string memory access, bytes32 user_id, bytes32 image_id) public {
     artworksCount ++;
     bytes32[] memory p;
@@ -60,9 +52,18 @@ contract Gallery {
     return (u_id, i_id, gallery[hashV].name, gallery[hashV].access, gallery[hashV].source, gallery[hashV].derivative);
   }
 
-  function addSource (bytes32 u_id, bytes32 i_id, lsbytes32 s_id) public {
+  function addSource (bytes32 u_id, bytes32 i_id, bytes32[] memory s_id) public {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
-    gallery[hashV].source.push(s_id);
+    for (uint i=0; i<s_id.length; i++) {
+      gallery[hashV].source.push(s_id[i]);
+    }
+  }
+
+  function addDerivative (bytes32 u_id, bytes32 i_id, bytes32[] memory d_id) public {
+    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+    for (uint i=0; i<d_id.length; i++) {
+      gallery[hashV].derivative.push(d_id[i]);
+    }
   }
 
 /*

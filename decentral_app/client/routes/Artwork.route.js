@@ -223,14 +223,37 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
       let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
 
       const response = await instance.methods.retrieveArtworkInfo(author_id, image_id).call();
+      let sources = [];
+      let derivatives = [];
 
-      //for each source and derivative, retrieve artwork
-      let source = [];
+      // //for each source and derivative, retrieve artwork
       for (var i=0; i< response[4].length; i++){
-        source.push(web3.utils.hexToUtf8(response[4][i]));
+        let s_id = web3.utils.hexToUtf8(response[4][i]);
+        await ArtworkModel.findById(s_id, function(error, Artwork){
+          if (error){
+            console.log("[details] Mongo retrieve sources error: "+error);
+            res.status(500).json({message: error.toString()});
+          }else{
+            sources.push(Artwork);
+            console.log("[details] retrieved sources from Mongo successfully, now return to client")
+          }
+        });
       }
 
-      let result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'access': response[3], 'sources': source, 'derivatives': response[5]};
+      for (var i=0; i< response[5].length; i++){
+        let d_id = web3.utils.hexToUtf8(response[5][i]);
+        await ArtworkModel.findById(d_id, function(error, Artwork){
+          if (error){
+            console.log("[details] Mongo retrieve derivatives error: "+error);
+            res.status(500).json({message: error.toString()});
+          }else{
+            derivatives.push(Artwork);
+            console.log("[details] retrieved derivatives from Mongo successfully, now return to client")
+          }
+        });
+      }
+
+      let result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'access': response[3], 'sources': sources, 'derivatives': derivatives};
       res.json(result);
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -241,20 +264,28 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
   callInstance();
 });
 
-//Given an artwork, add a source for it
-artworkRoute.route('/addSource/:author/:image/:source').get(function (req, res) {
-  let author = req.params.author;
-  let image = req.params.image;
-  let source = req.params.source;
+//Given an artwork, add sources of it
+artworkRoute.route('/addSource').post(function (req, res) {
+  let author = req.body.author;
+  let image = req.body.image;
+  let source = req.body.source;
 
+  console.log("# of source: "+ source.length);
   const callInstance = async function() {
     try {
       // parse id from string to bytes32 for contract
       let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
       let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
-      let source_id = web3.utils.asciiToHex(source.replace(/['"]+/g,''), 32);
+      let source_id = [];
 
-      console.log("[addSource] calling addSourcefrom account:"+accounts[0]);
+      for (var i=0; i< source.length; i++){
+        let id = web3.utils.asciiToHex(source[i].replace(/['"]+/g,''), 32);
+        source_id.push(id);
+      }
+
+      console.log("[addSource] source array: "+source_id)
+      console.log("[addSource] calling addSource from account: "+accounts[0]);
+
       await instance.methods.addSource(author_id, image_id, source_id).send({ from: accounts[0], gas: 300000 });
 
       console.log("[addSource] saved to contract successfully, return to client")
@@ -266,11 +297,102 @@ artworkRoute.route('/addSource/:author/:image/:source').get(function (req, res) 
     }
   };
   callInstance();
-
 });
 
-//Given an artwork, add a derivative for it
-artworkRoute.route('/addDer/:image/:der').get(function (req, res) {
+//Given an artwork, add sources of it
+artworkRoute.route('/addSource').post(function (req, res) {
+  let author = req.body.author;
+  let image = req.body.image;
+  let source = req.body.source;
+
+  const callInstance = async function() {
+    try {
+      // parse id from string to bytes32 for contract
+      let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
+      let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
+      let source_id = [];
+
+      for (var i=0; i< source.length; i++){
+        let id = web3.utils.asciiToHex(source[i].replace(/['"]+/g,''), 32);
+        source_id.push(id);
+      }
+
+      console.log("[addSource] source array: "+source_id)
+      console.log("[addSource] calling addSource from account: "+accounts[0]);
+
+      await instance.methods.addSource(author_id, image_id, source_id).send({ from: accounts[0], gas: 300000 });
+
+      console.log("[addSource] saved to contract successfully, return to client")
+      res.status(200).json({message:"Success"});
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      console.log("[addSource] Ethereum saving to "+image+": "+error);
+      res.status(500).json({message: error.toString()});
+    }
+  };
+  callInstance();
 });
+
+//Given an artwork, add derivatives of it
+artworkRoute.route('/addDer').post(function (req, res) {
+  let author = req.body.author;
+  let image = req.body.image;
+  let der = req.body.derivative;
+
+  const callInstance = async function() {
+    try {
+      // parse id from string to bytes32 for contract
+      let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
+      let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
+      let der_id = [];
+
+      for (var i=0; i< der.length; i++){
+        let id = web3.utils.asciiToHex(der[i].replace(/['"]+/g,''), 32);
+        der_id.push(id);
+      }
+
+      console.log("[addDerivative] calling addDerivative from account: "+accounts[0]);
+
+      await instance.methods.addDerivative(author_id, image_id, der_id).send({ from: accounts[0], gas: 300000 });
+
+      console.log("[addDerivative] saved to contract successfully, return to client")
+      res.status(200).json({message:"Success"});
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      console.log("[addSource] Ethereum saving to "+image+": "+error);
+      res.status(500).json({message: error.toString()});
+    }
+  };
+  callInstance();
+});
+
+
+// Temp
+// artworkRoute.route('/addSource/:author/:image/:source').get(function (req, res) {
+//   let author = req.params.author;
+//   let image = req.params.image;
+//   let source = req.params.source;
+//
+//   const callInstance = async function() {
+//     try {
+//       // parse id from string to bytes32 for contract
+//       let author_id = web3.utils.asciiToHex(author.replace(/['"]+/g,''), 32);
+//       let image_id = web3.utils.asciiToHex(image.replace(/['"]+/g,''), 32);
+//       let source_id = web3.utils.asciiToHex(source.replace(/['"]+/g,''), 32);
+//
+//       console.log("[addSource] calling addSourcefrom account:"+accounts[0]);
+//       await instance.methods.addSource(author_id, image_id, source_id).send({ from: accounts[0], gas: 300000 });
+//
+//       console.log("[addSource] saved to contract successfully, return to client")
+//       res.status(200).json({message:"Success"});
+//     } catch (error) {
+//       // Catch any errors for any of the above operations.
+//       console.log("[addSource] Ethereum saving to "+image+": "+error);
+//       res.status(500).json({message: error.toString()});
+//     }
+//   };
+//   callInstance();
+//
+// });
 
 module.exports = artworkRoute;
