@@ -51,7 +51,7 @@ artworkRoute.route('/').get(function (req, res) {
         Artworks:[]
       };
 
-      // Retreiev artworks from Ethereum
+      // Retrieve artworks from Ethereum
       const callInstance = async function() {
           try {
               for (var i=0; i< Artwork.length; i++){
@@ -69,8 +69,10 @@ artworkRoute.route('/').get(function (req, res) {
                   Json.Artworks.push(result);
                 }
               }
-            console.log("[retrieveAll] retrieved from Ethereum successfully, return to client")
-            res.json(Json)
+            console.log("[retrieveAll] retrieved from Ethereum successfully, return to client");
+
+            res.json(Json);
+
 
           } catch (error) {
             // Catch any errors for any of the above operations.
@@ -104,28 +106,7 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
 
   //TODO CLOUD UPLOAD here, return access token
   let accessL = "token"
-  //
-  // //cloudinary widget call
-  // let widget = cloudinary.createUploadWidget({
-  //   cloudName: 'fyp18003',
-  //   uploadPreset: 'tt3uhkl0',
-  //   sources: ['local', 'url'],
-  // }, (error, result) => {
-  //
-  //   if (result.event === "success") {
-  //
-  //     window.alert(result.info.secure_url);
-  //     accessL = result.info.secure_url;
-  //     public_id = result.public_id;
-  //    signature = result.signature;
-  //    delete function:
-  //    authentication
-  //
-  //    cloudinary.v2.uploader.destroy(public_id, options, callback);
-  //
-  // }
-  // });
-  //   widget.open();
+
   //delete artwork call
 
  // cloudinary.v2.uploader.destroy("#public id",

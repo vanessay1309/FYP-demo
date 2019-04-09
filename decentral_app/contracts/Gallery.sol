@@ -20,11 +20,11 @@ contract Gallery {
 
   constructor() public {
     //Data for contract to be in sync with Mongo
-    addArtwork("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "blue sky", "casual sunday", "token");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f2e33ceec224c919f7ed", "dark sky", "boring sunday", "token");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f3103ceec224c919f7ee", "monday", "work place", "token");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c", "later", "procrastination", "token");
-    
+    addArtwork("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "kitten2", "cute cat from my home", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten2.jpg");
+    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f2e33ceec224c919f7ed", "Boxer", "funny dog from my neighbor", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/boxer.jpg");
+    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f3103ceec224c919f7ee", "golden-retriever", "gold dog", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/golden-retriever.jpg");
+    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c", "kitten3", "unique one ", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten3.jpg");
+
   }
 
   function addArtwork (bytes32 user_id, bytes32 image_id, string memory _name, string memory caption, string memory access) public {
