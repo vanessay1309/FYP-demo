@@ -99,13 +99,12 @@ artworkRoute.route('/mongo').get(function (req, res) {
 
 // To Upload artwork
 artworkRoute.route('/uploadArtwork').post(function (req, res) {
-  let author_id = req.body.author_id
-  let name = req.body.name
-  let caption = req.body.caption
+  let author_id = req.body.author_id;
+  let name = req.body.name;
+  let caption = req.body.caption;
+  let access = req.body.access;
   let author = "";
 
-  //TODO CLOUD UPLOAD here, return access token
-  let accessL = "token"
 
   //delete artwork call
 
@@ -136,7 +135,7 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
                   let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
 
                   console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
-                  await instance.methods.addArtwork(author_id, image_id, name, caption, accessL).send({ from: accounts[0], gas: 300000 });
+                  await instance.methods.addArtwork(author_id, image_id, name, caption, access).send({ from: accounts[0], gas: 300000 });
 
                   console.log("[uploadArtwork] saved to contract successfully, return to client")
                   res.status(200).json({message:"Success"});

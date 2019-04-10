@@ -1,11 +1,14 @@
 import React, { Component } from "react";
-
+import "../css/button.css";
 
 
 class UploadButton extends Component {
+
+
   render() {
     return(
-      <h1>About</h1>
+      <button className="spin circle"onClick={this.props.Upload}>Upload</button>
+
 
     );
   }

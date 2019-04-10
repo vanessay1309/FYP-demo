@@ -15,6 +15,7 @@ import About from './pages/About';
 import Gallery from './pages/Gallery';
 import EditInfo from './pages/EditInfo';
 import Upload from './pages/Upload';
+import Featured from './pages/Featured';
 
 
 //Import components
@@ -32,7 +33,9 @@ class App extends Component {
     super(props);
       this.state= {
           name: null, web3: null, accounts: null, contract: null,
+
       };
+
   }
 
 
@@ -43,7 +46,7 @@ class App extends Component {
       this.state.name="alex";
       // window.alert(this.state.artworks[0].);
 
-      document.title = "Crypto Gallery";
+      // document.title = "Crypto Gallery";
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
@@ -78,8 +81,6 @@ class App extends Component {
     return (
 
       <div className="App">
-        <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">
-           </script>
         <link rel="stylesheet" href="css/style.css"/>
         <div className="w3-content" style={{ paddingBottom:'80px'}}>
 
@@ -96,7 +97,9 @@ class App extends Component {
             <Switch>
 
               <Route exact path={"/"} component={Home} />
+
                 <Route path={"/about"} component={About}/>
+                <Route exact path={"/featured"} component={Featured} />
                 <Route path={"/gallery"} component={Gallery}/>
                 <Route path={"/upload"} component={Upload}/>
 

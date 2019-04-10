@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import {
   BrowserRouter,
-  Link,
+   NavLink,
   Route,
   Switch,
 } from 'react-router-dom';
@@ -16,10 +16,11 @@ class NaviBar extends Component {
 
       <ul>
 
-        <li><Link exact activeClassName="current" to='/about'>About</Link></li>
-        <li><Link exact activeClassName="current" to='/gallery'>Artwork</Link></li>
+        <li>< NavLink  activeClassName="current" to='/about'>About</ NavLink></li>
+        <li>< NavLink  activeClassName="current" to='/featured'>Featured</ NavLink></li>
+        <li>< NavLink  activeClassName="current" to='/gallery'>Artwork</ NavLink></li>
         <li>Author</li>
-        <li><Link exact activeClassName="current" to='/upload'>Upload Artwork</Link></li>
+        <li >< NavLink  activeClassName="current" to='/upload'>Upload Artwork</ NavLink></li>
 
         <li> Login/Sign In </li>
       </ul>

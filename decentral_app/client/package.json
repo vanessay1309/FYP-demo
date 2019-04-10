@@ -3,17 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.0.0-alpha.6",
+    "@material-ui/core": "^4.0.0-alpha.7",
+    "cloudinary-react": "^1.1.0",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "material-ui": "^0.20.2",
-    "mongoose": "^5.4.16",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
+    "mongoose": "^5.5.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.1",
     "react-web3-provider": "^1.1.2",
-    "web3": "^1.0.0-beta.37",
+    "web3": "^1.0.0-beta.52",
     "websocket": "^1.0.28"
   },
   "scripts": {

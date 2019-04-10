@@ -21,7 +21,7 @@ class Gallery extends Component {
 
       fetch(urlArtworksList).then(
           results => results.json()).then(results => this.setState({'artworksList': results.Artworks})).catch(error => {
-    console.log(`400 Error when fetching: ${error}`);
+    console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
     });
   }
   render() {
