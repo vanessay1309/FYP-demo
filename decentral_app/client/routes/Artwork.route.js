@@ -15,11 +15,16 @@ let UserModel = require('../model/User');
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
 
 //Get contract instance
-let accounts, networkId, deployedNetwork, instance;
+let accounts, networkId, deployedNetwork, instance, balance;
 const componentDidMount = async function() {
   try {
     // Use web3 to get the user's accounts.
     accounts = await web3.eth.getAccounts();
+
+    //Let accounts[0] be default account and get balance
+    await web3.eth.getBalance(accounts[0], (err, b) => {
+      balance = b/(10**18);
+    });
 
     // Get the contract instance.
     networkId = await web3.eth.net.getId();
@@ -105,20 +110,20 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
   let access = req.body.access;
   let author = "";
 
+  // Reject action if not enough ether
+  if (balance < 10){
+    console.log("[uploadArtwork] You dont have enough ETH to execute this action");
+    res.status(500).json({message: "Not enough ETH"});
+  }
 
-  //delete artwork call
 
- // cloudinary.v2.uploader.destroy("#public id",
-  // function(error, result) {console.log(result, error) });
-//
+
+  //Find author name
   UserModel.findById(author_id, function(error, author){
     if (error){
       console.log("[uploadArtwork] Mongo retrieve user name error: "+error);
       res.status(500).json({message: error.toString()});
     }else{
-      console.log("[uploadArtwork] retrieved user name from Mongo successfully, now retrieve from Ethereum")
-      let Artwork = new ArtworkModel({author_id: author_id, name: name, author: author.name});
-
       Artwork.save(function(error, artwork){
         if (error){
           console.log("[uploadArtwork] mongo saving artwork error: "+error);
