@@ -42,13 +42,16 @@ class Upload extends Component {
           let  uploadArtwork = "http://localhost:4000/artworks/uploadArtwork";
           fetch(uploadArtwork,{
             method:'POST',
-            body: {
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
                 author_id: "5ca5ec14a5ef65243d180a71",
                 name: "Dou Dou",
                 caption: "cute cat",
                 access: this.state.accessL
-            }
-          }).catch(err => {
+            })
+          }).then(res =>{console.log("res: "+res)}).catch(err => {
             console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
 
 

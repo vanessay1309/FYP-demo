@@ -116,6 +116,9 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
     res.status(500).json({message: "Not enough ETH"});
   }
 
+  console.log("request: name"+name+","+"Access:"+access);
+  console.log("author_id :"+author_id);
+
 
 
   //Find author name
@@ -124,39 +127,45 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
       console.log("[uploadArtwork] Mongo retrieve user name error: "+error);
       res.status(500).json({message: error.toString()});
     }else{
-      console.log("[uploadArtwork] retrieved user name from Mongo successfully, now retrieve from Ethereum");
-      let Artwork = new ArtworkModel({author_id: author_id, name: name, author: author.name});
 
-      Artwork.save(function(error, artwork){
-        if (error){
-          console.log("[uploadArtwork] mongo saving artwork error: "+error);
-          res.status(500).json({message: error.toString()});
-        }else{
-          console.log("[uploadArtwork] artwork saved to mongo successfully, now save to contract");
+      if (author == null){
+        console.log("[uploadArtwork] cannot find author matching with given id");
+        res.status(500).json({message: "Cannot find author"});
+      }else{
+        console.log("[uploadArtwork] retrieved user name from Mongo successfully, now retrieve from Ethereum");
+        let Artwork = new ArtworkModel({author_id: author_id, name: name, author: author.name});
 
-          const callInstance = async function() {
-              try {
-                  // parse id from string to bytes32 for contract
-                  let tempA = JSON.stringify(artwork.author_id);
-                  let author_id = web3.utils.asciiToHex(tempA.replace(/['"]+/g,''), 32);
-                  let tempI = JSON.stringify(artwork._id);
-                  let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
+        Artwork.save(function(error, artwork){
+          if (error){
+            console.log("[uploadArtwork] mongo saving artwork error: "+error);
+            res.status(500).json({message: error.toString()});
+          }else{
+            console.log("[uploadArtwork] artwork saved to mongo successfully, now save to contract");
 
-                  console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
-                  await instance.methods.addArtwork(author_id, image_id, name, caption, access).send({ from: accounts[0], gas: 300000 });
+            const callInstance = async function() {
+                try {
+                    // parse id from string to bytes32 for contract
+                    let tempA = JSON.stringify(artwork.author_id);
+                    let author_id = web3.utils.asciiToHex(tempA.replace(/['"]+/g,''), 32);
+                    let tempI = JSON.stringify(artwork._id);
+                    let image_id = web3.utils.asciiToHex(tempI.replace(/['"]+/g,''), 32);
 
-                  console.log("[uploadArtwork] saved to contract successfully, return to client")
-                  res.status(200).json({message:"Success"});
+                    console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
+                    console.log("[uploadArtwork] saved to contract successfully, return to client")
+                    await instance.methods.addArtwork(author_id, image_id, name, caption, access).send({ from: accounts[0], gas: 300000 });
 
-              } catch (error) {
-                // Catch any errors for any of the above operations.
-                console.error("[uploadArtwork] Contract saving "+error);
-                res.status(500).json({message: error.toString()});
-              }
-            };
-          callInstance();
-        }
-      });
+                    res.status(200).json({message:"Success"});
+
+                } catch (error) {
+                  // Catch any errors for any of the above operations.
+                  console.error("[uploadArtwork] Contract saving "+error);
+                  res.status(500).json({message: error.toString()});
+                }
+              };
+            callInstance();
+          }
+        });
+      }
     }
   });
 });
