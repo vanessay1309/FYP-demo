@@ -16,6 +16,7 @@ import Gallery from './pages/Gallery';
 import EditInfo from './pages/EditInfo';
 import Upload from './pages/Upload';
 import Featured from './pages/Featured';
+import Details from './pages/Details';
 
 
 //Import components

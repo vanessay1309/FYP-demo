@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Gallery extends Component {
+class Details extends Component {
 
   constructor(props){
     super(props);
@@ -51,10 +51,11 @@ getArtworkFromServer(){
     this.isArtworkloaded();
     return(
       <div>
-      <hr/>
         <h1>Artwork List</h1>
-        <hr/>
+
+
                <div id="loader">
+
                  { !this.state.isFetched && <div> <br/><h1>🔥 🔥 ... Something has gone wrong ...🔥 🔥  ..</h1></div>}
                 { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Artwork is Loading ...🐑 ..🐑 .. 🐑 ..🐑 ..</h1></div>}
                </div>
@@ -64,7 +65,7 @@ getArtworkFromServer(){
                  {    this.state.isLoaded &&
                    this.state.artworksList.map(function(artwork){
                     return(
-                      <a href="" ><img src={artwork.access} alt={artwork.name}/></a>
+                      <img src={artwork.access} alt={artwork.name}/>
                     )
                   })
                   }
@@ -84,4 +85,4 @@ getArtworkFromServer(){
     );
   }
 }
-export default Gallery;
+export default Details;

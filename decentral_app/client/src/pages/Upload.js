@@ -47,9 +47,9 @@ class Upload extends Component {
                 name: "Dou Dou",
                 caption: "cute cat",
                 access: this.state.accessL
-
             }
-          })
+          }).catch(err => {
+            console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
 
 
       }

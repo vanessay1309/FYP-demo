@@ -124,6 +124,9 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
       console.log("[uploadArtwork] Mongo retrieve user name error: "+error);
       res.status(500).json({message: error.toString()});
     }else{
+      console.log("[uploadArtwork] retrieved user name from Mongo successfully, now retrieve from Ethereum");
+      let Artwork = new ArtworkModel({author_id: author_id, name: name, author: author.name});
+
       Artwork.save(function(error, artwork){
         if (error){
           console.log("[uploadArtwork] mongo saving artwork error: "+error);
