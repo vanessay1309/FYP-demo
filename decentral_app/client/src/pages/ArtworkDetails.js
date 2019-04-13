@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-
+import{Route, withRouter, NavLink} from 'react-router-dom';
 class ArtworkDetails extends Component {
 
   constructor(props){
     super(props);
       this.state= {
           artworkDetails:[],
+          sources:[],
+          derivatives:[],
           author:"",
           isLoaded: false,
           isFetched: true
@@ -30,12 +32,26 @@ getArtworkDetailFromServer(){
    let  urlArtworksList = "http://localhost:4000/artworks/details/"+author_id+"/"+artwork_id;
 
       fetch(urlArtworksList).then(
-          results => results.json()).then(results => this.setState({'artworkDetails': results})).catch(error => {
+          results => results.json()).then(results => this.setState({'artworkDetails': results, 'sources':results.sources, 'derivatives':results.derivatives})).catch(error => {
     console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
     this.state.isFetched=false;
     });
 }
 
+//get image detail --> render the page of detail
+  goToImageDetail(event){
+     let img_id = event.target.id;
+     let img_name = event.target.alt;
+     let img_author_id = event.target.getAttribute('author_id');
+     let img_author = event.target.getAttribute('author_name');
+     localStorage.setItem("artworkID", img_id);
+     localStorage.setItem("authorID", img_author_id);
+     localStorage.setItem("author", img_author);
+     // this.props.history.push('/details/${img_id}');
+
+   console.log("Go to Image Detail section image_id: "+img_id +" name: "+img_name+" author_id: "+img_author_id);
+
+  }
 
   // }
 // Check the rendering : Is artwork loaded
@@ -54,6 +70,8 @@ isArtworkloaded(){
 
   render() {
     this.isArtworkloaded();
+
+    var that = this;
     return(
       <div>
         <h1>Artwork Detail</h1>
@@ -76,11 +94,29 @@ isArtworkloaded(){
               <br/>
               Author :{this.state.author}
               <br/>
+            <div className="image-tree">
               sources :
+              { this.state.sources.map(function(artwork){
+                let url = "/artworks/"+artwork.name+"/details";
+                  return(
+                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name} author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
+
+                  )
+                })
+              }
+
               <br/>
               derivatives :
+              { this.state.derivatives.map(function(artwork){
+                let url = "/artworks/"+artwork.name+"/details";
+                  return(
+                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name}  author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
+
+                  )
+                })
+              }
             </div>
-            <div className="image-tree">
+
             </div>
           </div>
         </div>
@@ -90,4 +126,4 @@ isArtworkloaded(){
     );
   }
 }
-export default ArtworkDetails;
+export default withRouter(ArtworkDetails);

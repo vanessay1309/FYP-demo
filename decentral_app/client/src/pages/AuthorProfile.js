@@ -176,7 +176,7 @@ getAuthorFromServer(){
           <div className="grid">
           {    this.state.isArtworkLoaded &&
             this.state.artworkList.map(function(artwork){
-              let url = "/artworks/details";
+              let url = "/artworks/"+artwork.name+"/details";
              return(
              <NavLink to={url}>  <img id={artwork.image_id} author_id={artwork.author_id} src={artwork.access} alt={artwork.name} author={author} onClick={that.goToImageDetail}/> </NavLink>
 

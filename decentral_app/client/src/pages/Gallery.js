@@ -91,7 +91,7 @@ async getAllArtworkFromServer(){
                  <div className="grid">
                  {    this.state.isLoaded &&
                    this.state.artworkList.map(function(artwork){
-                     let url = "/artworks/details";
+                     let url = "/artworks/"+artwork.name+"/details";
                     return(
                     <NavLink to={url}>  <img id={artwork.image_id} author_id={artwork.author_id} author_name={artwork.author} src={artwork.access} alt={artwork.name} onClick={that.goToImageDetail}/></NavLink>
                     )

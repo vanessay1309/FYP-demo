@@ -83,15 +83,10 @@ goToAuthorDetail(event){
                   })
                   }
                 </div>
-
-
-
-                 </div>
+               </div>
 
                <div id="detail" style={{display:'none'}}>
                </div>
-
-
 
 
            </div>

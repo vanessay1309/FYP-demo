@@ -143,7 +143,7 @@ class App extends Component {
                 <Route path={"/gallery"} component={Gallery}/>
                 <Route path={"/upload"} component={Upload}/>
                 <Route path={"/author"} component={Author}/>
-                <Route path={"/artworks/details"} component={ArtworkDetails}/>
+                <Route path={"/artworks/:name/details"} component={ArtworkDetails}/>
                 <Route path={"/:name/profile"} component={AuthorProfile}/>
                 <Route path={"/signin"} component={SignInForm}/>
               </Switch>
