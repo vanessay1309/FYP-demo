@@ -1,7 +1,19 @@
-const path = require("path");
+var HDWalletProvider = require("truffle-hdwallet-provider");
+const MNEMONIC = 'YOUR WALLET KEY';
 
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // to customize your Truffle configuration!
-  contracts_build_directory: path.join(__dirname, "client/src/contracts")
+  networks: {
+    development: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*"
+    },
+    ropsten: {
+      provider: function() {
+        return new HDWalletProvider("tissue recipe oblige swim cement fog gain waste royal mouse chalk palace", "https://ropsten.infura.io/f16eae85e7814770818da8ae2a8e3631")
+      },
+      network_id: 3,
+      gas: 4000000
+    }
+  }
 };

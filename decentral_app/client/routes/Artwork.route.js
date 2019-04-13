@@ -13,6 +13,8 @@ let UserModel = require('../model/User');
 
 //Get web3Provider
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:7545");
+// let rpcUrl = "wss://ropsten.infura.io/ws/v3/f16eae85e7814770818da8ae2a8e3631"
+// const web3 = new Web3(new Web3.providers.WebsocketProvider(rpcUrl));
 
 //Get contract instance
 let accounts, networkId, deployedNetwork, instance, balance;
@@ -33,6 +35,13 @@ const componentDidMount = async function() {
       GalleryContract.abi,
       deployedNetwork && deployedNetwork.address,
     );
+    // instance = new web3.eth.Contract(
+    //   GalleryContract.abi,
+    //   0xb2631083dCFd6A7aEAa39D4391709a8AD729272e,
+    // );
+
+
+
 
   } catch (error) {
     // Catch any errors for any of the above operations.
@@ -40,7 +49,6 @@ const componentDidMount = async function() {
   }
 };
 componentDidMount();
-
 
 // To Get List Of Artworks from Ethereum
 artworkRoute.route('/').get(function (req, res) {

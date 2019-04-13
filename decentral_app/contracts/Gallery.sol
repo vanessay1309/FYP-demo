@@ -13,18 +13,10 @@ contract Gallery {
     bytes32[] derivatives;
   }
 
-  // Read/write Artwork
   // a hash table mapping hash(author_id, image_id) to Artwork
   mapping(bytes32 => Artwork) public gallery;
 
-
   constructor() public {
-    //Data for contract to be in sync with Mongo
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5cb20936f39f6a2b77219a3a", "kitten2", "cute cat from my home", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten2.jpg");
-    addArtwork("5ca9661f13bcf80e71fb3453", "5cb209e8f39f6a2b77219a3c", "Boxer", "funny dog from my neighbor", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/boxer.jpg");
-    addArtwork("5ca9661f13bcf80e71fb3453", "5cb20a21f39f6a2b77219a3d", "golden-retriever", "gold dog", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/golden-retriever.jpg");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5cb2097df39f6a2b77219a3b", "kitten3", "unique one ", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten3.jpg");
-    addSource("5ca9661f13bcf80e71fb3453", "5cb209e8f39f6a2b77219a3c", "5ca5ec2fa5ef65243d180a72",  "5cb20936f39f6a2b77219a3a");
   }
 
   function addArtwork (bytes32 author_id, bytes32 image_id, string memory _name, string memory caption, string memory access) public {
