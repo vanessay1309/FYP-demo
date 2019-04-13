@@ -12,7 +12,7 @@ class Header extends Component {
     return(
       <div>
         <Banner />
-            </div>
+          </div>
 
   );
   }

@@ -1,7 +1,39 @@
 import React, { Component } from "react";
 import "../css/featuredArtwork.css";
 class Featured extends Component {
+
+  constructor(props){
+    super(props);
+      this.state= {
+          artworkList: [] ,
+          isLoaded: false,
+          isFetched: true
+        };
+  }
+  async componentDidMount(){
+
+  //retrieve artwork from Artworkroute
+  this.getAllArtwortFromServer();
+
+  };
+
+
+  //retrieve artwork from Artworkroute
+getAllArtwortFromServer(){
+   let  urlArtworkList = "http://localhost:4000/artworks";
+
+      fetch(urlArtworkList).then(
+          results => results.json()).then(results => this.setState({'artworkList': results.Artworks})).catch(error => {
+    console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
+    this.state.isFetched=false;
+    });
+
+
+
+  }
+
   render() {
+    // this.isArtworkloaded();
     return(
       <div className="Featured">
 

@@ -4,9 +4,11 @@ import getWeb3 from "./utils/getWeb3";
 import ReactDOM from  "react-dom";
 import {
   BrowserRouter,
+  NavLink,
   Link,
   Route,
   Switch,
+  withRouter
 } from 'react-router-dom';
 
 //route pages layout
@@ -17,7 +19,8 @@ import EditInfo from './pages/EditInfo';
 import Upload from './pages/Upload';
 import Featured from './pages/Featured';
 import Details from './pages/Details';
-
+import Author from './pages/Author';
+// import Porfolio from './pages/Porfolio';
 
 //Import components
 import Header from './components/Header';
@@ -26,7 +29,10 @@ import NavBar from './components/NavBar';
 
 import "./App.css";
 import "./css/style.css";
-
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+// cookies.set(, { path: '/' });
+// console.log(cookies.get('myCat')); // Pacman
 
 // import  "./css/bootstrap.min.css";
 class App extends Component {
@@ -39,6 +45,12 @@ class App extends Component {
 
   }
 
+  isSignedIn(){
+    let login_URL = "http://localhost:4000/users/login";
+    // fetch(login_URL).then{
+    //
+    // }
+  }
 
 
   //ask for the meta mask account
@@ -103,6 +115,8 @@ class App extends Component {
                 <Route exact path={"/featured"} component={Featured} />
                 <Route path={"/gallery"} component={Gallery}/>
                 <Route path={"/upload"} component={Upload}/>
+                <Route path={"/author"} component={Author}/>
+                <Route path={"/artworks/details"} component={Details}/>
 
               </Switch>
                 </div>

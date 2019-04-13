@@ -2,15 +2,88 @@
 import cloudinary from "cloudinary-react";
 import UploadButton from "../components/UploadButton";
 import '../css/button.css';
-
+import List from '../components/sourceList'
+// var cloud =require('cloudinary');
 class Upload extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.Upload = this.Upload.bind(this);
-    this.state = { validated: false, uploaded:false, public_id:'',accessL:'', img_preview_loc:'', img_name:'',  img_caption:''};
+    this.state = { validated: false, uploaded:false, public_id:'',accessL:'', img_loc:'', img_data:'',img_name:'',  img_caption:''};
+
+    this.handleImageAddressInput = this.handleImageAddressInput.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleCaptionChange = this.handleCaptionChange.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
+
   }
-  public_id = '';
- uploadToCloud(){
+
+  handleImageAddressInput(event){
+    let reader = new FileReader();
+    let file = event.target.files[0];
+    let img_loc = event.target.value;
+        let uploadPreset= "tt3uhkl0";
+      event.preventDefault();
+
+      if(img_loc){
+        console.log("image loaded ");
+        reader.onloadend = () =>{
+          this.setState({img_data : reader.result, img_loc:img_loc});
+
+
+          console.log("Submit Handler: image adress is : " + this.state.img_loc);
+        }
+          //--> put it on the backend --> non-widget upload
+          // let  api_sign_request = function(params_to_sign,api_secret);
+          //cloudinary upload
+          // cloudinary.config({
+          //   cloud_name:"fyp18003",
+          //   api_key:674772198887786,
+          //   api_secret:'vd6twqB4LH18bVUiIdzNe03XcoE'
+          // });
+          //   cloudinary.uploader.unsigned_upload( "{img_data}",uploadPreset,{cloud_name:"fyp18003"}
+          //   , (error, result) => {
+          //     console.log("file uploaded");
+          //     console.log("result : ");
+          //   });
+          // }
+            reader.readAsDataURL(file);
+
+            console.log("image local : "+ img_loc);
+
+        }
+      else{
+        console.log("image empty " );
+        this.setState({img_data :'', img_loc :img_loc });
+      }
+
+      console.log("Submit Handler: image adress is : " + this.state.img_loc);
+      // let  api_sign_request = function(params_to_sign,api_secret);
+      //cloudinary upload
+}
+    //read the data file url
+
+  handleNameChange(event){
+    event.preventDefault();
+    this.setState({img_name : event.target.value});
+    console.log('Your caption is', event.target.value);
+  }
+
+  handleCaptionChange(event){
+
+    event.preventDefault();
+
+   this.setState({img_caption : event.target.value});
+   console.log('Your caption is', event.target.value);
+  }
+
+  submitHandler(){
+      console.log("Submit Handler");
+      console.log("Submit Handler : cloud config");
+
+  }
+
+//upload function to cloud
+  uploadToCloud(){
       let cloudName="fyp18003";
       let uploadPreset= "tt3uhkl0";
       // notification for entire upload process
@@ -47,13 +120,13 @@ class Upload extends Component {
             },
             body: JSON.stringify({
                 author_id: "5ca5ec14a5ef65243d180a71",
-                name: "Dou Dou",
-                caption: "cute cat",
+                name: this.state.img_name,
+                caption: this.state.img_caption,
                 access: this.state.accessL
             })
           }).then(res =>{console.log("res: "+res)}).catch(err => {
             console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
-
+           // fetch source artwork
 
       }
 
@@ -73,7 +146,7 @@ class Upload extends Component {
 
     }
     //upload the entire image process by calling backend uploadArtwork -> blockchain
-    Upload(){
+  Upload(){
         console.log("Upload Section :");
         //
         try{
@@ -104,36 +177,43 @@ class Upload extends Component {
 
     // <Form>1.Artwork name 2.caption 3.source work
 
-    handleInput(){
-      console.log("image is onload");
-    }
-
 
     render() {
 
-
+      //preview the loaded image
+      let $imagePreview = null;
+      if(this.state.img_loc){
+        $imagePreview =(<img id="image_preview" src={this.state.img_data} alt="image preview" />);
+      }else{
+        $imagePreview=  (<img id="image_preview" value=" Your image preview Here" />);
+      }
       return(
-
         <div className="UploadArtwork" >
             <h1 style={{ padding: '0 0 15px 0'}}>Upload Artwork</h1>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-              Artwork Name:
-                <input type="text" ref={(name) => this.state.img_name = name} />
-              </label>
-              <br/>
-              <label>
-               Caption:
-                <input type="text" ref={(caption) => this.state.img_caption = caption} />
-              </label>
-              <br/>
-              <input type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onInput={ this.handleInput.bind()}/>
-              <img id="image_preview" src="#" alt="image preview" />
-            </form>
-              <UploadButton type="submit" value="Submit" Upload={this.Upload.bind(this.uploadToCloud)}/>
-              <div>
-              <input id="back" type="button" value="back" style={{display:'inline', margin:'10px'}}/>
+
+            <form onSubmit={this.submitHandler}>
+              <div className="artwork_info">
+                <label for="name">
+                Artwork Name:
+                </label>
+                <input id = "name" type="text" placeholder="type name of the artwork here.." value={this.state.img_name} onChange={this.handleNameChange} />
+
+                <br/>
+                <label for="caption">
+                Caption:
+                </label>
+                <textarea id = "caption" type="text" cols="20" rows="5" placeholder="type caption here.." value={this.state.img_caption} onChange={this.handleCaptionChange} />
               </div>
+              <br/>
+              <input type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} required/>
+              <br/>
+              {$imagePreview}
+              <br/>
+              <UploadButton type="submit" value="Submit" Upload={this.Upload.bind()}/>
+            </form>
+
+            <List/>
+
         </div>
       );
     }
