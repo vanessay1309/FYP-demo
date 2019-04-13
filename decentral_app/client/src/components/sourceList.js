@@ -13,7 +13,7 @@ class sourceList extends Component {
       <div className="dropList">
 
       <ul>
-        <option value="hi">hi</option>
+        <option value="hi">Option for Source artwork </option>
       </ul>
 
 

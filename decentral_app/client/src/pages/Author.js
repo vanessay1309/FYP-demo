@@ -25,7 +25,7 @@ getArtworkFromServer(){
       fetch(urlauthorList).then(
           results => results.json()).then(results => this.setState({'authorList': results})).catch(error => {
     console.log(`400 Retrieving Author List Error when fetching: ${error}`);
-    this.state.isFetched=false;
+    this.setState({isFetched : false});
     });
 
 
@@ -34,15 +34,13 @@ getArtworkFromServer(){
 // Check the rendering : Is artwork loaded
   isAuthorloaded(){
     // checking the loading state
-    if (this.state.authorList.length >0 ){
-    console.log(  "authorlist is loaded " +this.state.authorList.length);
-        this.state.isLoaded = true;
-      }
-      else
-        {
+        if (this.state.authorList.length > 0 && this.state.isLoaded==false){
+        console.log(  "authorList is loaded " +this.state.authorList.length);
+            this.setState({isLoaded : true});
+            return;
+          }
+        if(this.state.authorList.length == 0)
           console.log(  "authorlist is null "+this.state.authorList.length);
-          this.state.isLoaded = false;
-        }
   }
 //get 500 error code for server failure : TODO
 
@@ -56,8 +54,8 @@ getArtworkFromServer(){
         <hr/>
 
                 <div id="loader">
-                  { !this.state.isFetched && <div> <br/><h1>🔥 🔥 ... Something has gone wrong ...🔥 🔥  ..</h1></div>}
-                 { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Author is Loading ...🐑 ..🐑 .. 🐑 ..🐑 ..</h1></div>}
+                  { !this.state.isFetched && <div> <br/><h1><span>🔥 🔥 </span>... Something has gone wrong ...<span>🔥 🔥 </span></h1></div>}
+                 { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Author is Loading ...<span>🐑 ..🐑 .. 🐑 ..🐑 ..</span></h1></div>}
                 </div>
                <div className = "authorList">
                 <div className="grid">

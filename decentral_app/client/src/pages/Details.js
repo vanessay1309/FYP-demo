@@ -39,56 +39,51 @@ getArtworkDetailFromServer(){
 
   // }
 // Check the rendering : Is artwork loaded
-  // isArtworkloaded(){
-  //   // checking the loading state
-  //   if (this.state.artworksList.length >0 ){
-  //   console.log(  "artworkslist is loaded " +this.state.artworksList.length);
-  //       this.state.isLoaded = true;
-  //     }
-  //     else
-  //       {
-  //         console.log(  "artworkslist is null "+this.state.artworksList.length);
-  //         this.state.isLoaded = false;
-  //       }
-  // }
+isArtworkloaded(){
+  // console.log(  "isArtworkloaded function " + this.state.artworkList.length);
+  // checking the loading state
+  if (this.state.artworkDetails && this.state.isLoaded==false){
+  console.log(  "artwork is loaded ");
+      this.setState({isLoaded : true});
+    }
+  if(this.state.artworkDetails == null)
+    console.log(  "400 Error: artwork is empty ");
+}
 //get 500 error code for server failure : TODO
 
 
   render() {
-    // this.isArtworkloaded();
+    this.isArtworkloaded();
     return(
       <div>
         <h1>Artwork Detail</h1>
 
 
-               <div id="loader">
+        <div id="loader">
+          { !this.state.isFetched && <div> <br/><h1><span>🔥 🔥 </span>... Something has gone wrong ...<span>🔥 🔥 </span> ..</h1></div>}
+         { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Artwork is Loading ...<span>🐑 ..🐑 .. 🐑 ..🐑 </span>..</h1>
+           </div>
+         }
 
-                 { !this.state.isFetched && <div> <br/><h1>🔥 🔥 ... Something has gone wrong ...🔥 🔥  ..</h1></div>}
-                { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Artwork is Loading ...🐑 ..🐑 .. 🐑 ..🐑 ..</h1></div>}
-               </div>
-
-
-                  })
-                  }
-                  <div className="container">
-                  <div className = "image">
-                  <img alt="image"src={this.state.artworkDetails.access}/>
-                  </div>
-                  <div className = "details">
-                    Artwork name : {this.state.artworkDetails.name}
-                    <br/>
-                    Caption :{this.state.artworkDetails.caption}
-                    <br/>
-                    Author :{this.state.author}
-                    <br/>
-                    sources :
-                    <br/>
-                    derivatives :
-                  </div>
-                  <div className="image-tree">
-                  </div>
-                  </div>
-
+          <div className="container">
+          <div className = "image">
+          <img alt="image"src={this.state.artworkDetails.access}/>
+          </div>
+          <div className = "details">
+            Artwork name : {this.state.artworkDetails.name}
+            <br/>
+            Caption :{this.state.artworkDetails.caption}
+            <br/>
+            Author :{this.state.author}
+            <br/>
+            sources :
+            <br/>
+            derivatives :
+          </div>
+          <div className="image-tree">
+          </div>
+          </div>
+            </div>
 
                </div>
 

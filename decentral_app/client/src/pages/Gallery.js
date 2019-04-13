@@ -17,8 +17,8 @@ class Gallery extends Component {
     await  this.getAllArtworkFromServer();
     console.log("State after fetching:\nartworkList Length" +this.state.artworkList.length);
   //retrieve artwork from Artworkroute
-    // this.isArtworkloaded();
-  };
+
+  }
 
 
   getInitialState(){
@@ -38,24 +38,21 @@ async getAllArtworkFromServer(){
       });
       console.log("Fetching /artwork route");
       this.setState({isFetched:true});
+
 }
 
 
 // Check the rendering : Is artwork loaded
-async  isArtworkloaded(){
+  isArtworkloaded(){
     // console.log(  "isArtworkloaded function " + this.state.artworkList.length);
     // checking the loading state
-    if (this.state.artworkList.length > 0 ){
+    if (this.state.artworkList.length > 0 && this.state.isLoaded==false){
     console.log(  "artworkslist is loaded " +this.state.artworkList.length);
         this.setState({isLoaded : true});
       }
-      else
-        {
-          console.log(  "artworkslist is null "+this.state.artworkList.length);
-          this.setState({isLoaded : false});
-        }
-        return
-  }
+    if(this.state.artworkList.length == 0)
+      console.log(  "authorlist is null "+this.state.artworkList.length);
+}
 //get 400 error code for fetching failure : TODO
 //get image detail --> render the page of detail
   goToImageDetail(event){
@@ -75,7 +72,7 @@ async  isArtworkloaded(){
 
 
   render() {
-
+    this.isArtworkloaded();
     var that = this;
     return(
       <div>
@@ -84,8 +81,8 @@ async  isArtworkloaded(){
         <h1>Artwork List</h1>
         <hr/>
                <div id="loader">
-                 { !this.state.isFetched && <div> <br/><h1>🔥 🔥 ... Something has gone wrong ...🔥 🔥  ..</h1></div>}
-                { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Artwork is Loading ...🐑 ..🐑 .. 🐑 ..🐑 ..</h1>
+                 { !this.state.isFetched && <div> <br/><h1><span>🔥 🔥 </span>... Something has gone wrong ...<span>🔥 🔥 </span> ..</h1></div>}
+                { this.state.isFetched&&!this.state.isLoaded && <div> <br/><h1>Artwork is Loading ...<span>🐑 ..🐑 .. 🐑 ..🐑 </span>..</h1>
                   </div>
                 }
                </div>
@@ -94,9 +91,9 @@ async  isArtworkloaded(){
                  <div className="grid">
                  {    this.state.isLoaded &&
                    this.state.artworkList.map(function(artwork){
-                     let url = "/gallery/details";
+                     let url = "/artworks/details";
                     return(
-                    <NavLink to="url">  <img id={artwork.image_id} author_id={artwork.author_id} author_name={artwork.author} src={artwork.access} alt={artwork.name} onClick={that.goToImageDetail}/></NavLink>
+                    <NavLink to={url}>  <img id={artwork.image_id} author_id={artwork.author_id} author_name={artwork.author} src={artwork.access} alt={artwork.name} onClick={that.goToImageDetail}/></NavLink>
                     )
                   })
                   }
