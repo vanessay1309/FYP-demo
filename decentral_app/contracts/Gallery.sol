@@ -36,6 +36,10 @@ contract Gallery {
     bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
     gallery[hashV] = Artwork(hashV, _name, caption, access, p, f);
   }
+  function retrieveArtwork (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory) {
+      bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+      return (u_id, i_id, gallery[hashV].name, gallery[hashV].access);
+    }
 
   function retrieveArtworkInfo (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory, string memory, bytes32[] memory, bytes32[] memory) {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));

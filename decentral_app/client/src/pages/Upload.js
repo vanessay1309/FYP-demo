@@ -78,8 +78,6 @@ class Upload extends Component {
 
   submitHandler(){
       console.log("Submit Handler");
-      console.log("Submit Handler : cloud config");
-
   }
 
 //upload function to cloud
@@ -151,32 +149,15 @@ class Upload extends Component {
         //
         try{
           this.uploadToCloud(() => console.log('uploadtoCloud done'));
-
-        // this.uploadToCloud().then(cloudInfo =>{
-          // console.log("201 : Finish uploading ");
-          // console.log("Cloud Image Info :"+cloudInfo);
-
-          // let cloudInfo = this.uploadToCloud;
-  }
-
-
-        // });
+        }
         catch(err){
           console.log("400 Error: could not perform uploading :"+err);
         };
 //         console.log("Upload function - success!: "+this.state.public_id+"accessL"+
 // this.state.accessL);
-
     }
 
-
-    // delete function:
-    // authentication
-
-    // cloudinary.v2.uploader.destroy(public_id, options, callback);
-
     // <Form>1.Artwork name 2.caption 3.source work
-
 
     render() {
 
@@ -191,26 +172,28 @@ class Upload extends Component {
         <div className="UploadArtwork" >
             <h1 style={{ padding: '0 0 15px 0'}}>Upload Artwork</h1>
 
-            <form onSubmit={this.submitHandler}>
+
               <div className="artwork_info">
                 <label for="name">
                 Artwork Name:
                 </label>
-                <input id = "name" type="text" placeholder="type name of the artwork here.." value={this.state.img_name} onChange={this.handleNameChange} />
+                <input id = "name" type="text" placeholder="type name of the artwork here.." value={this.state.img_name} onChange={this.handleNameChange} required/>
 
                 <br/>
                 <label for="caption">
                 Caption:
                 </label>
-                <textarea id = "caption" type="text" cols="20" rows="5" placeholder="type caption here.." value={this.state.img_caption} onChange={this.handleCaptionChange} />
+                <textarea id = "caption" type="text" cols="20" rows="5" placeholder="type caption here.." value={this.state.img_caption} onChange={this.handleCaptionChange} required/>
               </div>
+
               <br/>
-              <input type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} required/>
+              <input type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} />
               <br/>
               {$imagePreview}
               <br/>
-              <UploadButton type="submit" value="Submit" Upload={this.Upload.bind()}/>
-            </form>
+              
+              <UploadButton  Upload={this.Upload.bind()}/>
+
 
             <List/>
 

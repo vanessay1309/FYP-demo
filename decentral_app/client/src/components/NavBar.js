@@ -21,8 +21,7 @@ class NaviBar extends Component {
         <li>< NavLink  activeClassName="current" to='/gallery'>Artwork</ NavLink></li>
         <li>< NavLink  activeClassName="current" to='/author'>Author</NavLink></li>
         <li>< NavLink  activeClassName="current" to='/upload'>Upload Artwork</ NavLink></li>
-
-        <li> Login/Sign In </li>
+        <li> < NavLink  activeClassName="current" to='/signin'> Login/Sign In </ NavLink></li>
       </ul>
 
 

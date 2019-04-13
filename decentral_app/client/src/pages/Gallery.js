@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import{Route, withRouter, NavLink} from 'react-router-dom';
-import Details from "./Details"
+import ArtworkDetails from "./ArtworkDetails"
 class Gallery extends Component {
 
   constructor(props){
@@ -65,7 +65,7 @@ async getAllArtworkFromServer(){
      localStorage.setItem("author", img_author);
      // this.props.history.push('/details/${img_id}');
 
-   console.log("Go to Image Detail section image_id: "+ +" name: "+img_name+" author_id: "+img_author_id);
+   console.log("Go to Image Detail section image_id: "+img_id +" name: "+img_name+" author_id: "+img_author_id);
 
   }
 

@@ -18,10 +18,11 @@ import Gallery from './pages/Gallery';
 import EditInfo from './pages/EditInfo';
 import Upload from './pages/Upload';
 import Featured from './pages/Featured';
-import Details from './pages/Details';
+import ArtworkDetails from './pages/ArtworkDetails';
 import Author from './pages/Author';
+import AuthorProfile from './pages/AuthorProfile';
 // import Porfolio from './pages/Porfolio';
-
+import SignInForm from './pages/SignInForm'
 //Import components
 import Header from './components/Header';
 import NavBar from './components/NavBar';
@@ -45,20 +46,9 @@ class App extends Component {
           accounts: null,
           contract: null,
           isSignedIn:false,
-          login_msg:""
+          login_msg: null
       };
 
-  }
-
-  isSignedIn(){
-    let login_URL = "http://localhost:4000/users/login";
-    // fetch(login_URL).then{
-    fetch(login_URL).then(
-      results => results.json()).then(results => this.setState({'login_msg': results})).catch(error => {
-        console.log(`400 Login Error when fetching: ${error}`);
-        this.setState({isSignedIn:false});
-    // }
-      });
   }
 
 
@@ -85,7 +75,9 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: instance });
+      // check sign in state
+      // this.isSignedIn();
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -96,12 +88,26 @@ class App extends Component {
     }
   }
 
+    isSignedIn(){
+      console.log("isSignedIn :")
+      let login_URL = "http://localhost:4000/users/login";
+      // fetch(login_URL).then{
+      fetch(login_URL).then(
+        results => results.json()).then(results => this.setState({'login_msg': results.message})).catch(error => {
+          console.log(`400 Login Error when fetching: ${error}`);
+          this.setState({isSignedIn:false});
+      // }
+        });
+    }
+
   checkUserlogin(){
     //
-    // if (this.state.login_msg == "rr")
-    //
-    // if (this.state.login_msg == "rm")
-    //
+    console.log("checkUserlogin");
+     if (this.state.login_msg == "rr")
+      console.log("Have meta mask account but no user account");
+    //  this.setState({isSignedIn:false});
+    if (this.state.login_msg == "rm")
+      console.log("meta mask is not logged in");
     // if (this.state.login_msg == "rr")
 
   }
@@ -109,6 +115,7 @@ class App extends Component {
 
 
   render() {
+      this.checkUserlogin();
     //check the user have an account by logging in to the metamask
     //this.isSignedIn();
     return (
@@ -136,8 +143,9 @@ class App extends Component {
                 <Route path={"/gallery"} component={Gallery}/>
                 <Route path={"/upload"} component={Upload}/>
                 <Route path={"/author"} component={Author}/>
-                <Route path={"/artworks/details"} component={Details}/>
-
+                <Route path={"/artworks/details"} component={ArtworkDetails}/>
+                <Route path={"/:name/profile"} component={AuthorProfile}/>
+                <Route path={"/signin"} component={SignInForm}/>
               </Switch>
                 </div>
           </BrowserRouter>

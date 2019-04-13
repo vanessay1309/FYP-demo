@@ -421,10 +421,10 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 /* normal images grid style Artwork page     */
   .grid {
     display: grid;
-    margin-left: 25px;
-    grid-gap: 50px;
+    margin-right: 20px;
+    grid-gap: 30px;
     column-gap: 0%;
-    grid-template-columns: repeat(3,35% );
+    grid-template-columns: repeat(3,34% );
   }
  .grid img{
    max-width: 80%;

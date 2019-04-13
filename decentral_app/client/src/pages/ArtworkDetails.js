@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Details extends Component {
+class ArtworkDetails extends Component {
 
   constructor(props){
     super(props);
@@ -42,11 +42,11 @@ getArtworkDetailFromServer(){
 isArtworkloaded(){
   // console.log(  "isArtworkloaded function " + this.state.artworkList.length);
   // checking the loading state
-  if (this.state.artworkDetails && this.state.isLoaded==false){
+  if ((this.state.artworkDetails !='')&& this.state.isLoaded==false){
   console.log(  "artwork is loaded ");
       this.setState({isLoaded : true});
     }
-  if(this.state.artworkDetails == null)
+  if(this.state.artworkDetails == '')
     console.log(  "400 Error: artwork is empty ");
 }
 //get 500 error code for server failure : TODO
@@ -66,28 +66,28 @@ isArtworkloaded(){
          }
 
           <div className="container">
-          <div className = "image">
-          <img alt="image"src={this.state.artworkDetails.access}/>
-          </div>
-          <div className = "details">
-            Artwork name : {this.state.artworkDetails.name}
-            <br/>
-            Caption :{this.state.artworkDetails.caption}
-            <br/>
-            Author :{this.state.author}
-            <br/>
-            sources :
-            <br/>
-            derivatives :
-          </div>
-          <div className="image-tree">
-          </div>
-          </div>
+            <div className = "image">
+              <img alt="image"src={this.state.artworkDetails.access}/>
             </div>
+            <div className = "details">
+              Artwork name : {this.state.artworkDetails.name}
+              <br/>
+              Caption :{this.state.artworkDetails.caption}
+              <br/>
+              Author :{this.state.author}
+              <br/>
+              sources :
+              <br/>
+              derivatives :
+            </div>
+            <div className="image-tree">
+            </div>
+          </div>
+        </div>
 
-               </div>
+     </div>
 
     );
   }
 }
-export default Details;
+export default ArtworkDetails;

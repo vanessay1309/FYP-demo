@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import{Route, withRouter, NavLink} from 'react-router-dom';
 class Author extends Component {
 
   constructor(props){
@@ -7,7 +7,7 @@ class Author extends Component {
       this.state= {
           authorList: [] ,
           isLoaded: false,
-          isFetched: true
+          isFetched: false
         };
   }
   async componentDidMount(){
@@ -20,14 +20,16 @@ class Author extends Component {
 
   //retrieve artwork from Artworkroute
 getArtworkFromServer(){
+
    let  urlauthorList = "http://localhost:4000/users";
 
       fetch(urlauthorList).then(
           results => results.json()).then(results => this.setState({'authorList': results})).catch(error => {
     console.log(`400 Retrieving Author List Error when fetching: ${error}`);
     this.setState({isFetched : false});
+          return;
     });
-
+    this.setState({isFetched:true});
 
 
   }
@@ -42,15 +44,28 @@ getArtworkFromServer(){
         if(this.state.authorList.length == 0)
           console.log(  "authorlist is null "+this.state.authorList.length);
   }
-//get 500 error code for server failure : TODO
+
+
+// pass the info to the profile rendering
+goToAuthorDetail(event){
+   let author_id = event.target.id;
+   let author_name = event.target.alt;
+   localStorage.setItem("authorID", author_id);
+   // localStorage.setItem("authorName", author_name);
+   // this.props.history.push('/details/${img_id}');
+
+ console.log("Go to Author Detail section: \nauthor_id: "+author_id +"\nname: "+author_name);
+
+}
 
 
   render() {
     this.isAuthorloaded();
+    var that = this;
     return(
       <div>
         <hr/>
-        <h1>Artwork List</h1>
+        <h1>Author List</h1>
         <hr/>
 
                 <div id="loader">
@@ -61,8 +76,9 @@ getArtworkFromServer(){
                 <div className="grid">
                  {    this.state.isLoaded &&
                    this.state.authorList.map(function(author){
+                     let url = "/"+author.name+"/profile";
                     return(
-                      <a href="" ><img src={author.avatar} alt={author.name}/></a>
+                      <NavLink to={url}><img src={author.avatar} id={author._id} alt={author.name} onClick={that.goToAuthorDetail}/></NavLink>
                     )
                   })
                   }
@@ -82,4 +98,4 @@ getArtworkFromServer(){
     );
   }
 }
-export default Author;
+export default withRouter(Author);
