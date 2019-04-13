@@ -8,66 +8,57 @@ class Gallery extends Component {
       this.state= {
           artworkList: [] ,
           isLoaded: false,
-          isFetched: true
+          isFetched: false
         };
         // this.goToImageDetail = this.goToImageDetail.bind(this);
   }
   async componentDidMount(){
     this.getInitialState();
-    this.getAllArtworkFromServer();
+    await  this.getAllArtworkFromServer();
+    console.log("State after fetching:\nartworkList Length" +this.state.artworkList.length);
   //retrieve artwork from Artworkroute
-
-
-
+    // this.isArtworkloaded();
   };
+
+
   getInitialState(){
-    console.log("artworkList Length" +this.state.artworkList.length+
-    "isLoaded"+this.state.isLoaded+" isFetched: "+this.state.isFetched);
+    console.log("Initial State\nartworkList Length" +this.state.artworkList.length+
+    "\nisLoaded: "+this.state.isLoaded+"\nisFetched: "+this.state.isFetched);
   }
 
   //retrieve artwork from Artworkroute
-getAllArtworkFromServer(){
-   let  urlArtworkList = "http://localhost:4000/artworks";
+async getAllArtworkFromServer(){
+     let  urlArtworkList = "http://localhost:4000/artworks";
+      console.log("Fetching /artwork route");
+        fetch(urlArtworkList).then(
+            results => results.json()).then(results => this.setState({'artworkList': results.Artworks})).catch(error => {
+            console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
+            this.setState({isFetched:false});
+            return;
+      });
+      console.log("Fetching /artwork route");
+      this.setState({isFetched:true});
+}
 
-      fetch(urlArtworkList).then(
-          results => results.json()).then(results => this.setState({'artworkList': results.Artworks})).catch(error => {
-    console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
-    this.state.isFetched=false;
-    });
-
-
-
-  }
-//get specific artwork details
-// get the id of the author, and image_id
-//   getArtworkFromServer(){
-//     let author_id = '';
-//     let image_id = '';
-//      let  urlArtwork = "http://localhost:4000/artworks/details/:author/:image";
-//
-//         fetch(urlArtwork).then(
-//             results => results.json()).then(results => this.setState({'Artwork': results.Artworks})).catch(error => {
-//       console.log(`400 Retrieving Artwork List Error when fetching: ${error}`);
-//       this.state.isFetched=false;
-//       });
-// }
 
 // Check the rendering : Is artwork loaded
-  isArtworkloaded(){
+async  isArtworkloaded(){
+    // console.log(  "isArtworkloaded function " + this.state.artworkList.length);
     // checking the loading state
     if (this.state.artworkList.length > 0 ){
     console.log(  "artworkslist is loaded " +this.state.artworkList.length);
-        this.state.isLoaded = true;
+        this.setState({isLoaded : true});
       }
       else
         {
           console.log(  "artworkslist is null "+this.state.artworkList.length);
-          this.state.isLoaded = false;
+          this.setState({isLoaded : false});
         }
+        return
   }
 //get 400 error code for fetching failure : TODO
 //get image detail --> render the page of detail
-async  goToImageDetail(event){
+  goToImageDetail(event){
      let img_id = event.target.id;
      let img_name = event.target.alt;
      let img_author_id = event.target.getAttribute('author_id');
@@ -85,7 +76,6 @@ async  goToImageDetail(event){
 
   render() {
 
-  this.isArtworkloaded();
     var that = this;
     return(
       <div>
@@ -104,15 +94,12 @@ async  goToImageDetail(event){
                  <div className="grid">
                  {    this.state.isLoaded &&
                    this.state.artworkList.map(function(artwork){
-                     let url = "/gallery/"+artwork.name+"/details";
+                     let url = "/gallery/details";
                     return(
-                    <NavLink to="/artworks/details">  <img id={artwork.image_id} author_id={artwork.author_id} author_name={artwork.author} src={artwork.access} alt={artwork.name} onClick={that.goToImageDetail}/></NavLink>
+                    <NavLink to="url">  <img id={artwork.image_id} author_id={artwork.author_id} author_name={artwork.author} src={artwork.access} alt={artwork.name} onClick={that.goToImageDetail}/></NavLink>
                     )
                   })
                   }
-
-
-
 
                  </div>
                </div>

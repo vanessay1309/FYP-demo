@@ -39,8 +39,13 @@ class App extends Component {
   constructor(props){
     super(props);
       this.state= {
-          name: null, web3: null, accounts: null, contract: null,
-
+          user_id:null,
+          name: null,
+          web3: null,
+          accounts: null,
+          contract: null,
+          isSignedIn:false,
+          login_msg:""
       };
 
   }
@@ -48,15 +53,19 @@ class App extends Component {
   isSignedIn(){
     let login_URL = "http://localhost:4000/users/login";
     // fetch(login_URL).then{
-    //
+    fetch(login_URL).then(
+      results => results.json()).then(results => this.setState({'login_msg': results})).catch(error => {
+        console.log(`400 Login Error when fetching: ${error}`);
+        this.setState({isSignedIn:false});
     // }
+      });
   }
 
 
   //ask for the meta mask account
   async componentDidMount() {
     try {
-      this.state.name="alex";
+
       // window.alert(this.state.artworks[0].);
 
       // document.title = "Crypto Gallery";
@@ -87,10 +96,21 @@ class App extends Component {
     }
   }
 
+  checkUserlogin(){
+    //
+    // if (this.state.login_msg == "rr")
+    //
+    // if (this.state.login_msg == "rm")
+    //
+    // if (this.state.login_msg == "rr")
+
+  }
+
 
 
   render() {
-
+    //check the user have an account by logging in to the metamask
+    //this.isSignedIn();
     return (
 
       <div className="App">
