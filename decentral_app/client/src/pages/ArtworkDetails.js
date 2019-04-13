@@ -95,22 +95,20 @@ isArtworkloaded(){
               Author :{this.state.author}
               <br/>
             <div className="image-tree">
-              sources :
               { this.state.sources.map(function(artwork){
                 let url = "/artworks/"+artwork.name+"/details";
                   return(
-                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name} author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
+                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name} title={artwork.name} author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
 
                   )
                 })
               }
 
               <br/>
-              derivatives :
               { this.state.derivatives.map(function(artwork){
                 let url = "/artworks/"+artwork.name+"/details";
                   return(
-                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name}  author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
+                    <NavLink to={url}><img src={artwork.access} id={artwork.image_id} alt={artwork.name} title={artwork.name} author_id={artwork.author_id} onClick={that.goToImageDetail}/></NavLink>
 
                   )
                 })
