@@ -24,7 +24,9 @@ contract Gallery {
     addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f2e33ceec224c919f7ed", "Boxer", "funny dog from my neighbor", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/boxer.jpg");
     addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f3103ceec224c919f7ee", "golden-retriever", "gold dog", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/golden-retriever.jpg");
     addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c", "kitten3", "unique one ", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten3.jpg");
-
+    addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f55272595c24ddf8a35c");
+    addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f3103ceec224c919f7ee");
+    addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f2e33ceec224c919f7ed");
   }
 
   function addArtwork (bytes32 user_id, bytes32 image_id, string memory _name, string memory caption, string memory access) public {
@@ -35,46 +37,25 @@ contract Gallery {
     gallery[hashV] = Artwork(hashV, _name, caption, access, p, f);
   }
 
-  function retrieveArtwork (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory) {
-    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
-    return (u_id, i_id, gallery[hashV].name, gallery[hashV].access);
-  }
-
   function retrieveArtworkInfo (bytes32 u_id, bytes32 i_id) public returns(bytes32, bytes32, string memory, string memory, string memory, bytes32[] memory, bytes32[] memory) {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
     return (u_id, i_id, gallery[hashV].name, gallery[hashV].caption, gallery[hashV].access, gallery[hashV].source, gallery[hashV].derivative);
   }
 
-  function addSource (bytes32 u_id, bytes32 i_id, bytes32[] memory s_id) public {
+  function retrieveArtworkAccess (bytes32 u_id, bytes32 i_id) public returns(string memory) {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
-    for (uint i=0; i<s_id.length; i++) {
-      gallery[hashV].source.push(s_id[i]);
-    }
+    return (gallery[hashV].access);
   }
 
-  function addDerivative (bytes32 u_id, bytes32 i_id, bytes32[] memory d_id) public {
+
+  function addSource (bytes32 u_id, bytes32 i_id, bytes32 s_id) public {
     bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
-    for (uint i=0; i<d_id.length; i++) {
-      gallery[hashV].derivative.push(d_id[i]);
-    }
+    gallery[hashV].source.push(s_id);
   }
 
-/*
-  function retrieveSource (string memory user_id, string memory image_id) public returns(uint[] memory source){
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return gallery[hashV].source;
+  function addDerivative (bytes32 u_id, bytes32 i_id, bytes32 d_id) public {
+    bytes32 hashV = keccak256(abi.encodePacked(u_id, i_id));
+    gallery[hashV].derivative.push(d_id);
   }
-
-  function addDerivative (string memory user_id, string memory image_id, uint der_id) public {
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    gallery[hashV].derivative.push(der_id);
-  }
-
-  function retrieveDerivative (string memory user_id, string memory image_id) public returns (uint[] memory derivative) {
-    bytes32 hashV = keccak256(abi.encodePacked(user_id, image_id));
-    return gallery[hashV].derivative;
-  } */
-
-
 
 }
