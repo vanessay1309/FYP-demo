@@ -247,7 +247,6 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
             // let a_id32 = web3.utils.asciiToHex(a_id.replace(/['"]+/g,''), 32);
             // let s_id32 = web3.utils.asciiToHex(s_id.replace(/['"]+/g,''), 32);
             sources32.push({'author_id': s.author_id, 'image_id': s._id,'name': s.name, 'author': s.author,'source_aid': source_aid,'source_iid': source_iid});
-
             }
           });
         }
@@ -284,7 +283,7 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
           let der_aid32 = web3.utils.asciiToHex(derivatives32[i].a_id.replace(/['"]+/g,''), 32);
           let der_iid32 = web3.utils.asciiToHex(derivatives32[i].d_id.replace(/['"]+/g,''), 32);
           const der = await instance.methods.retrieveArtwork(der_aid32, der_iid32).call();
-          sources.push({'author_id': derivatives32[i].author_id, 'image_id': derivatives32[i].image_id, 'name': derivatives32[i].name, 'author': derivatives32[i].author, 'access': der[3]});
+          derivatives.push({'author_id': derivatives32[i].author_id, 'image_id': derivatives32[i].image_id, 'name': derivatives32[i].name, 'author': derivatives32[i].author, 'access': der[3]});
         }
       console.log("[details] retrieved derivatives from Mongo successfully")
 

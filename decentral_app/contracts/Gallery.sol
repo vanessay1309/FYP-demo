@@ -20,14 +20,11 @@ contract Gallery {
 
   constructor() public {
     //Data for contract to be in sync with Mongo
-    addArtwork("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "kitten2", "cute cat from my home", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten2.jpg");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f2e33ceec224c919f7ed", "Boxer", "funny dog from my neighbor", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/boxer.jpg");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f3103ceec224c919f7ee", "golden-retriever", "gold dog", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/golden-retriever.jpg");
-    addArtwork("5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c", "kitten3", "unique one ", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten3.jpg");
-    addSource("5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c", "5ca5ec2fa5ef65243d180a72", "5ca5f55272595c24ddf8a35c");
-    /* addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f55272595c24ddf8a35c");
-    addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f3103ceec224c919f7ee");
-    addSource("5ca5ec14a5ef65243d180a71", "5ca5ef821845d7248e9615fc", "5ca5f2e33ceec224c919f7ed"); */
+    addArtwork("5ca5ec2fa5ef65243d180a72", "5cb20936f39f6a2b77219a3a", "kitten2", "cute cat from my home", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten2.jpg");
+    addArtwork("5ca9661f13bcf80e71fb3453", "5cb209e8f39f6a2b77219a3c", "Boxer", "funny dog from my neighbor", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/boxer.jpg");
+    addArtwork("5ca9661f13bcf80e71fb3453", "", "golden-retriever", "gold dog", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/golden-retriever.jpg");
+    addArtwork("5ca5ec2fa5ef65243d180a72", "5cb2097df39f6a2b77219a3b", "kitten3", "unique one ", "https://res.cloudinary.com/fyp18003/image/upload/v1554541663/artworks/kitten3.jpg");
+    addSource("5ca9661f13bcf80e71fb3453", "5cb209e8f39f6a2b77219a3c", "5ca5ec2fa5ef65243d180a72",  "5cb20936f39f6a2b77219a3a");
   }
 
   function addArtwork (bytes32 author_id, bytes32 image_id, string memory _name, string memory caption, string memory access) public {
@@ -57,7 +54,7 @@ contract Gallery {
     bytes32 hashV = keccak256(abi.encodePacked(author_id, image_id));
     gallery[hashV].sources.push(source_iid);
     bytes32 source_hashV = keccak256(abi.encodePacked(source_aid, source_iid));
-    gallery[source_hashV].derivatives.push(source_iid);
+    gallery[source_hashV].derivatives.push(image_id);
   }
 
 }
