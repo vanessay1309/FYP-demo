@@ -52,8 +52,8 @@ getArtworkFromServer(){
 goToAuthorDetail(event){
    let author_id = event.target.id;
    let author_name = event.target.alt;
-   localStorage.setItem("authorID", author_id);
-   // localStorage.setItem("authorName", author_name);
+   window.sessionStorage.setItem("authorID", author_id);
+   // window.sessionStorage.setItem("authorName", author_name);
    // this.props.history.push('/details/${img_id}');
 
  console.log("Go to Author Detail section: \nauthor_id: "+author_id +"\nname: "+author_name);

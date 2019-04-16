@@ -160,32 +160,34 @@ async  uploadToCloud(){
          this.setState({artwork_id:data.image_id, message:data.message});
 
         }).catch(err => {
-            console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
+            console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);}).then(()=>{
 
-           // fetch source artwork
-           //  wait for artwork_id return
-           if(this.state.isSourceWorkLoaded &&  this.state.message=="success"){
-             console.log("Fetching :POST --> addSourceArtwork route");
-             let  addSourceArtworkURL = "http://localhost:4000/artworks/addSource";
-             fetch(addSourceArtworkURL,{
-               method:'POST',
-               headers:{
-                 'Content-Type':'application/json'
-               },
-               body: JSON.stringify({
-                   author_id: this.state.user_id, //change to this.props.user_id :TODO
-                   image_id: this.state.artwork_id,
-                   source_aid: this.state.source_author_id,
-                   source_iid: this.state.source_artwork_id
-               })
-             }).then(res =>{
-               console.log("200 Add Source Successfully");
-               console.log("res: "+res);}).catch(err => {
-               console.log("400 -----Cant add Source -----")
-               console.log(`400 add source to Ethereum : Error when fetching: ${error}`);});
-           }
-      }
+                   // fetch source artwork
+                   //  wait for artwork_id return
+                   if(this.state.isSourceWorkLoaded ){
+                     console.log("Fetching :POST --> addSourceArtwork route");
+                     let  addSourceArtworkURL = "http://localhost:4000/artworks/addSource";
+                     fetch(addSourceArtworkURL,{
+                       method:'POST',
+                       headers:{
+                         'Content-Type':'application/json'
+                       },
+                       body: JSON.stringify({
+                           author_id: this.state.user_id, //change to this.props.user_id :TODO
+                           image_id: this.state.artwork_id,
+                           source_aid: this.state.source_author_id,
+                           source_iid: this.state.source_artwork_id
+                       })
+                     }).then(res =>{
+                       console.log("200 Add Source Successfully");
+                       console.log("res: "+res);}).catch(err => {
+                       console.log("400 -----Cant add Source -----")
+                       console.log(`400 add source to Ethereum : Error when fetching: ${error}`);});
+                   }
 
+
+            });
+              }
               else{
                 console.log("400 Error : could not perform uploading to cloudinary");
                 return "err";
@@ -225,7 +227,7 @@ async  Upload(){
     //get option from the available artwork
     getAllArtworkFromServer(){
         //get userid from local cloudStorage
-        let uid = localStorage.getItem("uid");
+        let uid = window.sessionStorage.getItem("uid");
         this.setState({user_id:uid});
         let  urlArtworkList = "http://localhost:4000/artworks";
          console.log("Fetching /artwork route");

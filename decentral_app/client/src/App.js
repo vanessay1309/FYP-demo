@@ -56,7 +56,7 @@ class App extends Component {
 
 
   //ask for the meta mask account
-  async componentDidMount() {
+  async componentWillMount() {
     try {
       console.log("componentDidMount");
 
@@ -147,8 +147,8 @@ checkUserLogin(data){
          user_id:user_id,
          name:user_name
        });
-       localStorage.setItem("uid",this.state.user_id);
-       localStorage.setItem("wallet",this.state.accounts[0]);
+       window.sessionStorage.setItem("uid",this.state.user_id);
+       window.sessionStorage.setItem("wallet",this.state.accounts[0]);
 
      }
 

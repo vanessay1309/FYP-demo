@@ -43,7 +43,7 @@ class AuthorProfile extends Component {
 //------------------------- Author Details loading ----------------------
 // retrieve artwork from Artworkroute
 getAuthorFromServer(){
-    let author_id  = localStorage.getItem("authorID");
+    let author_id  = window.sessionStorage.getItem("authorID");
      let  urlAuthorDetails= "http://localhost:4000/users/get/"+author_id;
       console.log("Fetching /users/get/:id route URL: " + urlAuthorDetails);
         fetch(urlAuthorDetails).then(
@@ -76,7 +76,7 @@ getAuthorFromServer(){
 //------------------------- Artwork List loading ------------------------
   // retrieve artwork from Artworkroute
   getAllArtworkFromServer(){
-    let author_id  = localStorage.getItem("authorID");
+    let author_id  = window.sessionStorage.getItem("authorID");
     let urlArtworkList = "http://localhost:4000/artworks/byAuthor/"+author_id;   //TODO
         console.log("Fetching /artwork/byAuthor/:id route ");
           fetch(urlArtworkList).then(
@@ -98,9 +98,9 @@ getAuthorFromServer(){
      let img_author = event.target.getAttribute('author');
      console.log("Go to Image Detail section: \nimage_id: "+ img_id+"\nname: "+img_name+"\nauthor_id: "+img_author_id +"\nauthor name:" + img_author) ;
 
-     localStorage.setItem("artworkID", img_id);
-     localStorage.setItem("authorID", img_author_id);
-     localStorage.setItem("author", img_author);
+     window.sessionStorage.setItem("artworkID", img_id);
+     window.sessionStorage.setItem("authorID", img_author_id);
+     window.sessionStorage.setItem("author", img_author);
      // this.props.history.push('/details/${img_id}');
 
 

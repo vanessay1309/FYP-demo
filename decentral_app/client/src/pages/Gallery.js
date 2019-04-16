@@ -63,9 +63,9 @@ class Gallery extends Component {
      let img_name = event.target.alt;
      let img_author_id = event.target.getAttribute('author_id');
      let img_author = event.target.getAttribute('author_name');
-     localStorage.setItem("artworkID", img_id);
-     localStorage.setItem("authorID", img_author_id);
-     localStorage.setItem("author", img_author);
+     window.sessionStorage.setItem("artworkID", img_id);
+     window.sessionStorage.setItem("authorID", img_author_id);
+     window.sessionStorage.setItem("author", img_author);
      // this.props.history.push('/details/${img_id}');
 
    console.log("Go to Image Detail section image_id: "+img_id +" name: "+img_name+" author_id: "+img_author_id);

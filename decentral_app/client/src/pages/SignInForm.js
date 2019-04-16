@@ -28,7 +28,7 @@ this.getWalletInstance();
  }
 
  getWalletInstance(){
-  let wallet = localStorage.getItem("wallet");
+  let wallet = window.sessionStorage.getItem("wallet");
   if (wallet  == null){
     this.setState({isWalletNull:true});
   }else{

@@ -55,9 +55,9 @@ async shouldComponentUpdate(nextProps, nextState) {
   }
 
 async getInitialState(){
-  let artwork_id= localStorage.getItem("artworkID");
-  let author_id  = localStorage.getItem("authorID");
-  let author= localStorage.getItem("author");
+  let artwork_id= window.sessionStorage.getItem("artworkID");
+  let author_id  = window.sessionStorage.getItem("authorID");
+  let author= window.sessionStorage.getItem("author");
 
   this.setState({
     artwork_id:artwork_id,
@@ -103,13 +103,13 @@ getArtworkDetailFromServer(){
      console.log("Go to Image Detail section image_id: "+img_id +" author name: "+img_author+" author_id: "+img_author_id);
 
        this.reset();
-     localStorage.setItem("artworkID", img_id);
-     localStorage.setItem("authorID", img_author_id);
-     localStorage.setItem("author", img_author);
+     window.sessionStorage.setItem("artworkID", img_id);
+     window.sessionStorage.setItem("authorID", img_author_id);
+     window.sessionStorage.setItem("author", img_author);
 
-     let temp_artwork_id = localStorage.getItem("artworkID");
-     let temp_author_id  = localStorage.getItem("authorID");
-     let temp_author= localStorage.getItem("author");
+     let temp_artwork_id = window.sessionStorage.getItem("artworkID");
+     let temp_author_id  = window.sessionStorage.getItem("authorID");
+     let temp_author= window.sessionStorage.getItem("author");
      console.log("get Item TESTING");
      console.log(temp_artwork_id+"\n"+temp_author_id+"\n"+temp_author);
      // this.props.history.push('/details/${img_id}');
