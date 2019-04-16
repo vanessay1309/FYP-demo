@@ -14,7 +14,8 @@ class SignInForm extends Component {
       author_name:'',
       bio:'',
       avatar:'',
-      isInfoLoaded:false
+      isInfoLoaded:false,
+      isWalletNull:true
       };
       this.handleImageAddressInput = this.handleImageAddressInput.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
@@ -28,7 +29,11 @@ this.getWalletInstance();
 
  getWalletInstance(){
   let wallet = localStorage.getItem("wallet");
-  this.setState({wallet_account:wallet});
+  if (wallet  == null){
+    this.setState({isWalletNull:true});
+  }else{
+    this.setState({wallet_account:wallet, isWalletNull:false});
+  }
 
  }
   handleNameChange(event){
@@ -157,8 +162,8 @@ async   Upload(){
   }
   //upload the entire image process by calling backend uploadArtwork -> blockchain
 async  Register(){
-      console.log("Upload Section :");
-      //
+      console.log("Register Section :");
+      if (!this.state.isWalletNull){
       try{
           await this.IsInfoLoad();
           if (this.state.isInfoLoaded){
@@ -172,6 +177,10 @@ async  Register(){
 
         console.log("400 Error: could not perform uploading :"+err);
       };
+    }
+    else{
+      window.alert("Please login to a meta mask account");
+    }
 //         console.log("Upload function - success!: "+this.state.public_id+"accessL"+
 // this.state.accessL);
   }
