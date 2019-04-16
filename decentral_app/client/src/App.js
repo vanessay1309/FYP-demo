@@ -58,7 +58,8 @@ class App extends Component {
   //ask for the meta mask account
   async componentDidMount() {
     try {
-      await  this.getUserInfo();
+      console.log("componentDidMount");
+
       // window.alert(this.state.artworks[0].);
 
       // document.title = "Crypto Gallery";
@@ -80,9 +81,10 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });
+      this.setState({ web3, accounts:accounts, contract: instance });
       // check sign in state
       // this.isSignedIn();
+      await  this.getUserInfo();
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -97,11 +99,22 @@ class App extends Component {
   }
   getUserInfo(){
       console.log("getUserInfo :")
+
       let login_URL = "http://localhost:4000/users/login";
+        console.log("fetching : "+ login_URL +"account" +this.state.accounts[0]);
       // fetch(login_URL).then{
-      fetch(login_URL).then(
+      fetch(login_URL,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({
+          account:this.state.accounts[0]
+        })
+      }).then(
         results => results.json()).then(results => {
           this.setState({'login_msg': results.message});
+          console.log("finish POSTING");
           this.checkUserLogin(results);
 
         }).catch(error => {
@@ -134,6 +147,8 @@ checkUserLogin(data){
          user_id:user_id,
          name:user_name
        });
+       localStorage.setItem("uid",this.state.user_id);
+       localStorage.setItem("wallet",this.state.accounts[0]);
 
      }
 

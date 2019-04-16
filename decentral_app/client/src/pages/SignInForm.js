@@ -10,6 +10,7 @@ class SignInForm extends Component {
   constructor(props){
     super(props);
     this.state={
+      wallet_account:'',
       author_name:'',
       bio:'',
       avatar:'',
@@ -21,7 +22,15 @@ class SignInForm extends Component {
       this.submitHandler = this.submitHandler.bind(this);
       this.Register = this.Register.bind(this);
     }
+ async componentDidMount(){
+this.getWalletInstance();
+ }
 
+ getWalletInstance(){
+  let wallet = localStorage.getItem("wallet");
+  this.setState({wallet_account:wallet});
+
+ }
   handleNameChange(event){
     event.preventDefault();
     this.setState({author_name : event.target.value});
@@ -116,6 +125,7 @@ async   Upload(){
                       'Content-Type':'application/json'
                     },
                     body: JSON.stringify({
+                        account:this.state.wallet_account,
                         name: this.state.author_name,
                         bio: this.state.bio,
                         avatar: this.state.avatar

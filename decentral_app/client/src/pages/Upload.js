@@ -12,6 +12,7 @@ class Upload extends Component {
       isInfoLoaded:false,
       public_id:'',
       accessL:'',
+      user_id:'',
       img_loc:'',
       img_data:'',
       img_name:'',
@@ -131,8 +132,8 @@ async  uploadToCloud(){
         if (result.event === "success") {
 
           this.state.accessL = result.info.secure_url;
-          this.state.public_id = result.info.public_id;
-          signature = result.info.signature;
+          // this.state.public_id = result.info.public_id;
+          // signature = result.info.signature;
           // console.log("201 Upload Success to Cloud: access :"+ this.state.accessL +"\n public_id: "+this.state.public_id +"\n signature: "+ signature);
           console.log("201 Upload Success to Cloud: access ");
           window.alert("Upload Success");
@@ -147,7 +148,7 @@ async  uploadToCloud(){
               'Content-Type':'application/json'
             },
             body: JSON.stringify({
-                author_id: "5ca5ec14a5ef65243d180a71",
+                author_id: this.state.user_id,
                 name: this.state.img_name,
                 caption: this.state.img_caption,
                 access: this.state.accessL
@@ -174,7 +175,7 @@ async  uploadToCloud(){
                  'Content-Type':'application/json'
                },
                body: JSON.stringify({
-                   author_id: "5ca5ec14a5ef65243d180a71", //change to this.props.user_id :TODO
+                   author_id: this.state.user_id, //change to this.props.user_id :TODO
                    image_id: this.state.artwork_id,
                    source_aid: this.state.source_author_id,
                    source_iid: this.state.source_artwork_id
@@ -225,6 +226,9 @@ async  Upload(){
 
     //get option from the available artwork
     getAllArtworkFromServer(){
+        //get userid from local cloudStorage
+        let uid = localStorage.getItem("uid");
+        this.setState({user_id:uid});
         let  urlArtworkList = "http://localhost:4000/artworks";
          console.log("Fetching /artwork route");
            fetch(urlArtworkList).then(
