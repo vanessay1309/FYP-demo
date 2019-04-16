@@ -38,18 +38,17 @@ userRoute.route('/').get(function (req, res) {
 });
 
 userRoute.route('/login').get(function (req, res) {
-  console.log(accounts[0]);
   if (accounts.length==0){
     //no account logged in
     console.log("[user login] user need to login account first");
     res.json({message:"rm"});
   }else{
-    UserModel.find({address: accounts[0]}, function (error, User) {
+    UserModel.findOne({account: accounts[0]}, function (error, User) {
       if (error) {
         console.log(error);
       }
       else {
-        if (User.length == 0){
+        if (User == null){
           //require user to register
           console.log("[user login] user need to registrate for an account");
           res.json({message:"rr"});

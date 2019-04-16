@@ -251,20 +251,22 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
         }
           for (var i=0; i< response[5].length; i++){
             let source_iid = web3.utils.hexToUtf8(response[5][i]);
-            ArtworkModel.findById(source_iid, function(error, s){
-              if (error){
-                console.log("[details] Mongo get sources error: "+error);
-                reject(err);
-                res.status(500).json({message: error.toString()});
-              }else{
-                let source_aid = JSON.stringify(s.author_id);
-                sources32.push({'author_id': s.author_id, 'image_id': s._id,'name': s.name, 'author': s.author,'source_aid': source_aid,'source_iid': source_iid});
-                //resolve promise on last item
-                if (i == response[5].length){
-                  resolve();
+            if (source_iid != ""){
+              ArtworkModel.findById(source_iid, function(error, s){
+                if (error){
+                  console.log("[details] Mongo get sources error: "+error);
+                  reject(err);
+                  res.status(500).json({message: error.toString()});
+                }else{
+                  let source_aid = JSON.stringify(s.author_id);
+                  sources32.push({'author_id': s.author_id, 'image_id': s._id,'name': s.name, 'author': s.author,'source_aid': source_aid,'source_iid': source_iid});
+                  //resolve promise on last item
+                  if (i == response[5].length){
+                    resolve();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         })
       }
@@ -276,21 +278,23 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
           }
           for (var i=0; i< response[6].length; i++){
             let der_iid = web3.utils.hexToUtf8(response[6][i]);
-            ArtworkModel.findById(der_iid, function(error, d){
-              if (error){
-                console.log("[details] Mongo get sources error: "+error);
-                reject(err);
-                res.status(500).json({message: error.toString()});
-              }else{
-                let der_aid = JSON.stringify(d.author_id);
-                derivatives32.push({'author_id': d.author_id, 'image_id': d._id,'name': d.name, 'author': d.author,'der_aid': der_aid,'der_iid': der_iid});
-                if (i == response[6].length){
-                  resolve();
-                }
-                }
-              });
+            if (der_iid != ""){
+              ArtworkModel.findById(der_iid, function(error, d){
+                if (error){
+                  console.log("[details] Mongo get sources error: "+error);
+                  reject(err);
+                  res.status(500).json({message: error.toString()});
+                }else{
+                  let der_aid = JSON.stringify(d.author_id);
+                  derivatives32.push({'author_id': d.author_id, 'image_id': d._id,'name': d.name, 'author': d.author,'der_aid': der_aid,'der_iid': der_iid});
+                  if (i == response[6].length){
+                    resolve();
+                  }
+                  }
+                });
             }
-          });
+          }
+        });
       }
 
       await getSource();
