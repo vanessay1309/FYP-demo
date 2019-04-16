@@ -63,10 +63,12 @@ class App extends Component {
 
       // document.title = "Crypto Gallery";
       // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+      // const web3 = await getWeb3();
+      const web3 = await new getWeb3(getWeb3.givenProvider);
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      alert("my account is:"+accounts[0]);
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();

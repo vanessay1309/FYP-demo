@@ -37,39 +37,34 @@ userRoute.route('/').get(function (req, res) {
   });
 });
 
-userRoute.route('/login').get(function (req, res) {
-  if (accounts.length==0){
-    //no account logged in
-    console.log("[user login] user need to login account first");
-    res.json({message:"rm"});
-  }else{
-    UserModel.findOne({account: accounts[0]}, function (error, User) {
-      if (error) {
-        console.log(error);
+userRoute.route('/login').post(function (req, res) {
+  let user_account = req.body.account;
+  UserModel.findOne({account: user_account}, function (error, User) {
+    if (error) {
+      console.log(error);
+    }
+    else {
+      if (User == null){
+        //require user to register
+        console.log("[user login] user need to registrate for an account");
+        res.json({message:"rr"});
+      }else{
+        res.json({message:"success", User});
       }
-      else {
-        if (User == null){
-          //require user to register
-          console.log("[user login] user need to registrate for an account");
-          res.json({message:"rr"});
-        }else{
-          res.json({message:"success", User});
-        }
-      }
-    });
-  }
+    }
+  });
 });
 
 // To Add New User
 userRoute.route('/registrate').post(function (req, res) {
   //Using user default wallet address as account address
   var newUser = req.body;
-  Object.assign(newUser, {account: accounts[0]});
+  // Object.assign(newUser, {account: accounts[0]});
   let User = new UserModel(newUser);
 
   User.save()
   .then(game => {
-    console.log("[registrate user] added new user with address "+accounts[0]);
+    console.log("[registrate user] added new user with address "+req.body.account);
     res.json({message:"Success"});
   })
   .catch(error => {
