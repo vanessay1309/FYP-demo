@@ -16,6 +16,7 @@ class Upload extends Component {
       img_data:'',
       img_name:'',
       img_caption:'',
+      artwork_id:'',
       artworkList: [] ,
       isLoaded: false,
       isFetched: false,
@@ -107,7 +108,7 @@ async  uploadToCloud(){
       let cloudName="fyp18003";
       let uploadPreset= "tt3uhkl0";
       // notification for entire upload process
-      let isUploaded = false;
+      // let isUploaded = false;
       let  accessL,public_id,signature;
 
       //determine the storage folder
@@ -152,8 +153,12 @@ async  uploadToCloud(){
                 access: this.state.accessL
             })
           }).then(res =>{
-            console.log("res: "+res);
-            artwork_id = res.artwork_id;
+            return res.json();
+
+        }).then(data =>{
+          console.log("res msg: "+data.message);
+          console.log("res id: "+data.image_id);
+         this.setState({artwork_id:data.image_id});
 
         }).catch(err => {
             console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
@@ -170,12 +175,13 @@ async  uploadToCloud(){
                },
                body: JSON.stringify({
                    author_id: "5ca5ec14a5ef65243d180a71", //change to this.props.user_id :TODO
-                   image_id: artwork_id,
-                   source_aid: this.state.source_artwork_id,
-                   source_iid: this.state.source_author_id
+                   image_id: this.state.artwork_id,
+                   source_aid: this.state.source_author_id,
+                   source_iid: this.state.source_artwork_id
                })
              }).then(res =>{
-               console.log("res: "+res)}).catch(err => {
+               console.log("200 Add Source Successfully");
+               console.log("res: "+res);}).catch(err => {
                console.log("400 -----Cant add Source -----")
                console.log(`400 add source to Ethereum : Error when fetching: ${error}`);});
            }
@@ -186,8 +192,10 @@ async  uploadToCloud(){
         return "err";
       }
       });
+
         console.log("widget open ");
         cloudStorage.open();
+
 
       // --------------cloud image upload ends --------
         // cloudStorage.v2.uploader.upload("", function(error, result) {console.log(result, error); });

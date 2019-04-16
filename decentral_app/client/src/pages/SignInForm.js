@@ -10,15 +10,16 @@ class SignInForm extends Component {
   constructor(props){
     super(props);
     this.state={
-      author_name:null,
-      bio:null,
-      avatar:null,
+      author_name:'',
+      bio:'',
+      avatar:'',
       isInfoLoaded:false
       };
       this.handleImageAddressInput = this.handleImageAddressInput.bind(this);
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleBioChange = this.handleBioChange.bind(this);
       this.submitHandler = this.submitHandler.bind(this);
+      this.Register = this.Register.bind(this);
     }
 
   handleNameChange(event){
@@ -73,15 +74,108 @@ class SignInForm extends Component {
     }
 
 
-    // Check input box content
-    IsInfoLoad(){
-      if(this.state.author_name != "" && this.state.bio != ""){
-          this.setState({isInfoLoaded:true});
+    // update user info
+async   Upload(){
+
+              let cloudName="fyp18003";
+              let uploadPreset= "tt3uhkl0";
+              // notification for entire upload process
+              let isUploaded = false;
+              let  accessL,public_id,signature;
+
+              //determine the storage folder
+              let folder = "avatar";
+
+
+              console.log("uploading to cloudinary, cloudName:"+ cloudName+" uploadPreset:"+uploadPreset);
+              // let  api_sign_request = function(params_to_sign,api_secret);
+
+              //cloudinary widget call
+              let cloudStorage = window.cloudinary.createUploadWidget({
+                cloudName:cloudName ,
+                uploadPreset: uploadPreset,
+                folder:folder,
+                // use_filename:true,
+                resourceType:"image",
+                clientAllowedFormats: "jpg,png"
+              }, (error, result) => {
+                //success --> retrieve artwork info, url
+                if (result.event === "success") {
+
+                  this.state.avatar = result.info.secure_url;
+                  // console.log("201 Upload Success to Cloud: access :"+ this.state.accessL +"\n public_id: "+this.state.public_id +"\n signature: "+ signature);
+                  console.log("201 Upload Success to Cloud: access ");
+                  console.log("Avatar address: "+this.state.avatar);
+                  window.alert("Upload Success");
+
+                  //fetch : register
+                  let  registerURL = "http://localhost:4000/users/registrate";
+                  fetch(registerURL,{
+                    method:'POST',
+                    headers:{
+                      'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: this.state.author_name,
+                        bio: this.state.bio,
+                        avatar: this.state.avatar
+
+                    })
+                  }).then(res =>{
+                    console.log("res: "+res)}).catch(err => {
+                    console.log("400 -----Cant register-----")
+                    console.log(`400 register : Error when fetching: ${err}`);});
+
+
+                }
+                else{
+                  console.log("400 Error : could not perform uploading to cloudinary");
+                  return "err";
+                }
+              });
+
+
+
+          // if (this.state.isInfoLoaded){
+            console.log("widget open ");
+            cloudStorage.open();
+          // }else{
+                    // window.alert("Please fill in the name and caption !");
+                  // }
+
+  }
+  //upload the entire image process by calling backend uploadArtwork -> blockchain
+async  Register(){
+      console.log("Upload Section :");
+      //
+      try{
+          await this.IsInfoLoad();
+          if (this.state.isInfoLoaded){
+              this.Upload();
+          }else{
+            window.alert("Please fill in the name and caption !");
+          }
+
       }
-      else{
-        this.setState({isInfoLoaded:false});
-      }
+      catch(err){
+
+        console.log("400 Error: could not perform uploading :"+err);
+      };
+//         console.log("Upload function - success!: "+this.state.public_id+"accessL"+
+// this.state.accessL);
+  }
+
+  // Check input box content
+  IsInfoLoad(){
+    if(this.state.author_name != "" && this.state.bio != ""){
+        this.setState({isInfoLoaded:true});
     }
+    else{
+      this.setState({isInfoLoaded:false});
+    }
+  }
+
+
 
 
   render() {
@@ -95,7 +189,6 @@ class SignInForm extends Component {
     return(
       <div className ="signIn">
         <h1>Sign In Form </h1>
-        <form>
           <div id="name">
             <label for="name">
             Name:
@@ -115,7 +208,7 @@ class SignInForm extends Component {
             <input id="avatar" type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} />
               {$imagePreview}
           </div>
-        </form>
+          <button onClick={this.Register}>Submit</button>
       </div>
 
   );
