@@ -81,7 +81,7 @@ class Upload extends Component {
       console.log("Submit Handler: image adress is : " + this.state.img_loc);
       // let  api_sign_request = function(params_to_sign,api_secret);
       //cloudinary upload
-}
+    }
     //read the data file url
 
   handleNameChange(event){
