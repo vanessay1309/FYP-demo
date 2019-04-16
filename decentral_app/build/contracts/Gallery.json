@@ -6774,10 +6774,16 @@
       "links": {},
       "address": "0xb2631083dCFd6A7aEAa39D4391709a8AD729272e",
       "transactionHash": "0xc96a71fbce668b7d8823471bc9f4c3981b9afa0723f24115c0c027eec5896675"
+    },
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xc83Cd647d430a5790407Dc1888Aaf14eD1f2eA21",
+      "transactionHash": "0x9af1c22a813736fa509c676b8743a96213aa2c96e1f1863cd0583cc6806438c1"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-04-13T17:47:45.013Z",
+  "updatedAt": "2019-04-16T11:07:36.853Z",
   "devdoc": {
     "methods": {}
   },

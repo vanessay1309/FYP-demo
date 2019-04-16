@@ -160,9 +160,10 @@ artworkRoute.route('/uploadArtwork').post(function (req, res) {
 
                     console.log("[uploadArtwork] calling addArtwork from account:"+accounts[0]);
                     console.log("[uploadArtwork] saved to contract successfully, return to client")
+                    res.status(200).json({message:"Success", image_id: artwork._id});
                     await instance.methods.addArtwork(author_id, image_id, name, caption, access).send({ from: accounts[0], gas: 300000 });
 
-                    res.status(200).json({message:"Success"});
+                    // res.status(200).json({message:"Success", image_id: artwork._id});
 
                 } catch (error) {
                   // Catch any errors for any of the above operations.
@@ -229,79 +230,93 @@ artworkRoute.route('/details/:author/:image').get(function (req, res) {
   let author_id = req.params.author;
   let image_id = req.params.image;
   let result = "";
+  // parse id from string to bytes32 for contract
+  let author_id32 = web3.utils.asciiToHex(author_id.replace(/['"]+/g,''), 32);
+  let image_id32 = web3.utils.asciiToHex(image_id.replace(/['"]+/g,''), 32);
+  let sources = [];
+  let derivatives = [];
+  let sources32 = [];
+  let derivatives32 = [];
 
   const callInstance = async function() {
     try {
-      // parse id from string to bytes32 for contract
-      let author_id32 = web3.utils.asciiToHex(author_id.replace(/['"]+/g,''), 32);
-      let image_id32 = web3.utils.asciiToHex(image_id.replace(/['"]+/g,''), 32);
-
       const response = await instance.methods.retrieveArtworkInfo(author_id32, image_id32).call();
       console.log("[details] Mongo retrieve artwork successfully, now retrieve details of source and derivative");
-      let sources = [];
-      let derivatives = [];
-      let sources32 = [];
-      let derivatives32 = [];
 
       //retrieve source
-      for (var i=0; i< response[5].length; i++){
-        let source_iid = web3.utils.hexToUtf8(response[5][i]);
-        await ArtworkModel.findById(source_iid, function(error, s){
-          if (error){
-            console.log("[details] Mongo get sources error: "+error);
-            res.status(500).json({message: error.toString()});
-          }else{
-            let source_aid = JSON.stringify(s.author_id);
-            // let a_id32 = web3.utils.asciiToHex(a_id.replace(/['"]+/g,''), 32);
-            // let s_id32 = web3.utils.asciiToHex(s_id.replace(/['"]+/g,''), 32);
-            sources32.push({'author_id': s.author_id, 'image_id': s._id,'name': s.name, 'author': s.author,'source_aid': source_aid,'source_iid': source_iid});
+      function getSource() {
+        return new Promise(function(resolve, reject){
+        if (response[5].length == 0){
+          resolve();
+        }
+          for (var i=0; i< response[5].length; i++){
+            let source_iid = web3.utils.hexToUtf8(response[5][i]);
+            ArtworkModel.findById(source_iid, function(error, s){
+              if (error){
+                console.log("[details] Mongo get sources error: "+error);
+                reject(err);
+                res.status(500).json({message: error.toString()});
+              }else{
+                let source_aid = JSON.stringify(s.author_id);
+                sources32.push({'author_id': s.author_id, 'image_id': s._id,'name': s.name, 'author': s.author,'source_aid': source_aid,'source_iid': source_iid});
+                //resolve promise on last item
+                if (i == response[5].length){
+                  resolve();
+                }
+              }
+            });
+          }
+        })
+      }
+
+      function getDer(){
+        return new Promise(function(resolve, reject){
+          if (response[6].length == 0){
+            resolve();
+          }
+          for (var i=0; i< response[6].length; i++){
+            let der_iid = web3.utils.hexToUtf8(response[6][i]);
+            ArtworkModel.findById(der_iid, function(error, d){
+              if (error){
+                console.log("[details] Mongo get sources error: "+error);
+                reject(err);
+                res.status(500).json({message: error.toString()});
+              }else{
+                let der_aid = JSON.stringify(d.author_id);
+                derivatives32.push({'author_id': d.author_id, 'image_id': d._id,'name': d.name, 'author': d.author,'der_aid': der_aid,'der_iid': der_iid});
+                if (i == response[6].length){
+                  resolve();
+                }
+                }
+              });
             }
           });
-        }
+      }
+
+      await getSource();
+      await getDer();
+      console.log("[details] Mongo get author_ids success")
 
         for (var i=0; i< sources32.length; i++){
-          // let a_id32 = sources32[i].a_id32
-          // let s_id32 = sources32[i].s_id32;
           let source_aid32 = web3.utils.asciiToHex(sources32[i].source_aid.replace(/['"]+/g,''), 32);
           let source_iid32 = web3.utils.asciiToHex(sources32[i].source_iid.replace(/['"]+/g,''), 32);
-          const source = await instance.methods.retrieveArtwork(source_aid32, source_iid32).call();
-          sources.push({'author_id': sources32[i].author_id, 'image_id': sources32[i].image_id, 'name': sources32[i].name, 'author': sources32[i].author, 'access': source[3]});
-        }
-      console.log("[details] retrieved sources from Mongo successfully")
-
-      //retrieve derivatives
-      for (var i=0; i< response[6].length; i++){
-        let d_id = web3.utils.hexToUtf8(response[6][i]);
-        await ArtworkModel.findById(d_id, function(error, d){
-          if (error){
-            console.log("[details] Mongo get sources error: "+error);
-            res.status(500).json({message: error.toString()});
-          }else{
-            let a_id = JSON.stringify(d.author_id);
-            // let a_id32 = web3.utils.asciiToHex(a_id.replace(/['"]+/g,''), 32);
-            // let d_id32 = web3.utils.asciiToHex(d_id.replace(/['"]+/g,''), 32);
-            derivatives32.push({'author_id': d.author_id, 'image_id': d._id,'name': d.name, 'author': d.author,'a_id': a_id,'d_id': d_id});
-            }
-          });
+          const access = await instance.methods.retrieveArtworkAccess(source_aid32, source_iid32).call();
+          sources.push({'author_id': sources32[i].author_id, 'image_id': sources32[i].image_id, 'name': sources32[i].name, 'author': sources32[i].author, 'access': access});
         }
 
         for (var i=0; i< derivatives32.length; i++){
-          // let a_id32 = sources32[i].a_id32;
-          // let d_id32 = sources32[i].d_id32;
-          let der_aid32 = web3.utils.asciiToHex(derivatives32[i].a_id.replace(/['"]+/g,''), 32);
-          let der_iid32 = web3.utils.asciiToHex(derivatives32[i].d_id.replace(/['"]+/g,''), 32);
-          const der = await instance.methods.retrieveArtwork(der_aid32, der_iid32).call();
-          derivatives.push({'author_id': derivatives32[i].author_id, 'image_id': derivatives32[i].image_id, 'name': derivatives32[i].name, 'author': derivatives32[i].author, 'access': der[3]});
+          let der_aid32 = web3.utils.asciiToHex(derivatives32[i].der_aid.replace(/['"]+/g,''), 32);
+          let der_iid32 = web3.utils.asciiToHex(derivatives32[i].der_iid.replace(/['"]+/g,''), 32);
+          const access = await instance.methods.retrieveArtworkAccess(der_aid32, der_iid32).call();
+          derivatives.push({'author_id': derivatives32[i].author_id, 'image_id': derivatives32[i].image_id, 'name': derivatives32[i].name, 'author': derivatives32[i].author, 'access': access});
         }
-      console.log("[details] retrieved derivatives from Mongo successfully")
 
-
-
+      console.log("[details] Contract get source and derivatives success")
       result = {'author_id': web3.utils.hexToUtf8(response[0]), 'image_id': web3.utils.hexToUtf8(response[1]),'name': response[2], 'caption': response[3], 'access': response[4], 'sources': sources, 'derivatives': derivatives};
 
     } catch (error) {
       // Catch any errors for any of the above operations.
-      console.log("[details] getting from Ethereum artworks "+image_id+": "+error);
+      console.log("[details] getting artworks "+image_id+": "+error);
       res.status(500).json({message: error.toString()});
     }
   }
