@@ -50,14 +50,15 @@ class App extends Component {
           isLoggedin:false,
           isMember:false
       };
-
+      // this.getUserInfo=this.getUserInfo.bind();
+      // this.checkUserLogin=this.checkUserLogin.bind();
   }
 
 
   //ask for the meta mask account
   async componentDidMount() {
     try {
-        this.getUserInfo();
+      await  this.getUserInfo();
       // window.alert(this.state.artworks[0].);
 
       // document.title = "Crypto Gallery";
@@ -99,7 +100,8 @@ class App extends Component {
       fetch(login_URL).then(
         results => results.json()).then(results => {
           this.setState({'login_msg': results.message});
-          this.checkUserLogin(results.message,results.user);
+          this.checkUserLogin(results);
+
         }).catch(error => {
           console.log(`400 Login Error when fetching: ${error}`);
           this.setState({isMember:false});
@@ -108,8 +110,11 @@ class App extends Component {
     }
 //fetching req to users/login
 //check if current client is the registrated member
-async  checkUserLogin(msg,user_data){
+checkUserLogin(data){
     //
+    let msg = data.message;
+    let user_id = data.User._id;
+    let user_name = data.User.name;
     console.log("Validating user info: \nmsg:"+msg );
     console.log("checkUserlogin");
      if (this.state.login_msg == "rr"){
@@ -121,11 +126,11 @@ async  checkUserLogin(msg,user_data){
       console.log("meta mask is not logged in");
      if (this.state.login_msg == "success"){
 
-       console.log("Validating user info: \nmsg:"+msg+"\nuser_id: " + user_data._id );
+       console.log("Validating user info: \nmsg:"+msg+"\nuser_id: " +user_id );
        this.setState({
          isMember:true,
-         user_id:user_data.id,
-         name:user_data.name
+         user_id:user_id,
+         name:user_name
        });
 
      }
@@ -149,7 +154,7 @@ async  checkUserLogin(msg,user_data){
 
               </div>
 
-          <NavBar/>
+          <NavBar isMember={this.state.isMember}/>
 
                 <div className="Container">
             <Switch>

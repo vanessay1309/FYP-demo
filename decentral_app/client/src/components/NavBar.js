@@ -7,7 +7,16 @@ import {
   Switch,
 } from 'react-router-dom';
 class NaviBar extends Component {
-  render() {
+
+  async componentDidMount(){
+    console.log ("componentDidMount: \nisMember:"+this.props.isMember);
+  }
+
+
+  render()
+
+
+  {
     return(
       <div id="navbar">
       <nav>
@@ -19,9 +28,9 @@ class NaviBar extends Component {
         <li>< NavLink  activeClassName="current" to='/featured'>Featured</ NavLink></li>
         <li>< NavLink  activeClassName="current" to='/gallery'>Artwork</ NavLink></li>
         <li>< NavLink  activeClassName="current" to='/author'>Author</NavLink></li>
-        {this.props.isMember&& <li>< NavLink  activeClassName="current" to='/upload'>Upload Artwork</ NavLink></li>
+        {this.props.isMember && <li>< NavLink  activeClassName="current" to='/upload'>Upload Artwork</ NavLink></li>
         }
-        <li> < NavLink  activeClassName="current" to='/signin'> Login/Sign In </ NavLink></li>
+        <li> < NavLink  activeClassName="current" to='/signin' > Login/Sign In </ NavLink></li>
       </ul>
 
 
