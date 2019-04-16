@@ -19,6 +19,7 @@ class Upload extends Component {
       img_caption:'',
       artwork_id:'',
       artworkList: [] ,
+      message: "",
       isLoaded: false,
       isFetched: false,
       sourcePreviewURL:"",
@@ -156,14 +157,14 @@ async  uploadToCloud(){
         }).then(data =>{
           console.log("res msg: "+data.message);
           console.log("res id: "+data.image_id);
-         this.setState({artwork_id:data.image_id});
+         this.setState({artwork_id:data.image_id, message:data.message});
 
         }).catch(err => {
             console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
 
            // fetch source artwork
            //  wait for artwork_id return
-           if(this.state.isSourceWorkLoaded){
+           if(this.state.isSourceWorkLoaded &&  this.state.message=="success"){
              console.log("Fetching :POST --> addSourceArtwork route");
              let  addSourceArtworkURL = "http://localhost:4000/artworks/addSource";
              fetch(addSourceArtworkURL,{
