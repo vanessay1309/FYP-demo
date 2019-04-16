@@ -132,9 +132,6 @@ async  uploadToCloud(){
         if (result.event === "success") {
 
           this.state.accessL = result.info.secure_url;
-          // this.state.public_id = result.info.public_id;
-          // signature = result.info.signature;
-          // console.log("201 Upload Success to Cloud: access :"+ this.state.accessL +"\n public_id: "+this.state.public_id +"\n signature: "+ signature);
           console.log("201 Upload Success to Cloud: access ");
           window.alert("Upload Success");
 
@@ -165,7 +162,7 @@ async  uploadToCloud(){
             console.log(`400 Upload Artwork to Ethereum : Error when fetching: ${error}`);});
 
            // fetch source artwork
-           // TODO : wait for artwork_id return
+           //  wait for artwork_id return
            if(this.state.isSourceWorkLoaded){
              console.log("Fetching :POST --> addSourceArtwork route");
              let  addSourceArtworkURL = "http://localhost:4000/artworks/addSource";
