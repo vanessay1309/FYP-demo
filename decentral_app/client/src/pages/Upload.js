@@ -187,11 +187,11 @@ async  uploadToCloud(){
            }
       }
 
-      else{
-        console.log("400 Error : could not perform uploading to cloudinary");
-        return "err";
-      }
-      });
+              else{
+                console.log("400 Error : could not perform uploading to cloudinary");
+                return "err";
+              }
+              });
 
         console.log("widget open ");
         cloudStorage.open();

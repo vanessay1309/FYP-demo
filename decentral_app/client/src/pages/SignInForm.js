@@ -106,7 +106,7 @@ async   Upload(){
                   // console.log("201 Upload Success to Cloud: access :"+ this.state.accessL +"\n public_id: "+this.state.public_id +"\n signature: "+ signature);
                   console.log("201 Upload Success to Cloud: access ");
                   console.log("Avatar address: "+this.state.avatar);
-                  window.alert("Upload Success");
+                  console.log("Upload to cloud Success");
 
                   //fetch : register
                   let  registerURL = "http://localhost:4000/users/registrate";
@@ -123,6 +123,7 @@ async   Upload(){
                     })
                   }).then(res =>{
                     console.log("res: "+res)}).catch(err => {
+                    window.alert("Upload failed")
                     console.log("400 -----Cant register-----")
                     console.log(`400 register : Error when fetching: ${err}`);});
 

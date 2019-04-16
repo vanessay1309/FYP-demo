@@ -47,8 +47,8 @@ class App extends Component {
           contract: null,
           isSignedIn:false,
           login_msg: null,
-          isLoggedin:true,
-          isRegistered:false
+          isLoggedin:false,
+          isMember:false
       };
 
   }
@@ -57,7 +57,7 @@ class App extends Component {
   //ask for the meta mask account
   async componentDidMount() {
     try {
-
+        this.getUserInfo();
       // window.alert(this.state.artworks[0].);
 
       // document.title = "Crypto Gallery";
@@ -90,40 +90,52 @@ class App extends Component {
     }
   }
   async componentDidUpdate(){
-          this.checkUserlogin();
+          // this.checkUserlogin();
   }
-  isSignedIn(){
-      console.log("isSignedIn :")
+  getUserInfo(){
+      console.log("getUserInfo :")
       let login_URL = "http://localhost:4000/users/login";
       // fetch(login_URL).then{
       fetch(login_URL).then(
-        results => results.json()).then(results => this.setState({'login_msg': results.message})).catch(error => {
+        results => results.json()).then(results => {
+          this.setState({'login_msg': results.message});
+          this.checkUserLogin(results.message,results.user);
+        }).catch(error => {
           console.log(`400 Login Error when fetching: ${error}`);
-          this.setState({isSignedIn:false});
+          this.setState({isMember:false});
       // }
         });
     }
-
-  checkUserlogin(){
+//fetching req to users/login
+//check if current client is the registrated member
+async  checkUserLogin(msg,user_data){
     //
+    console.log("Validating user info: \nmsg:"+msg );
     console.log("checkUserlogin");
-     if (this.state.login_msg == "rr")
+     if (this.state.login_msg == "rr"){
+       this.setState({isMember:false});
       console.log("Have meta mask account but no user account");
+    }
     //  this.setState({isSignedIn:false});
     if (this.state.login_msg == "rm")
       console.log("meta mask is not logged in");
      if (this.state.login_msg == "success"){
-       this.setState({isLoggedin:true});
+
+       console.log("Validating user info: \nmsg:"+msg+"\nuser_id: " + user_data._id );
+       this.setState({
+         isMember:true,
+         user_id:user_data.id,
+         name:user_data.name
+       });
+
      }
 
   }
 
 
-
   render() {
 
-    //check the user have an account by logging in to the metamask
-    //this.isSignedIn();
+
     return (
 
       <div className="App">
