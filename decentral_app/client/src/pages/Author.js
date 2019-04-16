@@ -16,7 +16,9 @@ class Author extends Component {
   this.getArtworkFromServer();
 
   };
-
+  async componentDidUpdate(){
+     this.isAuthorloaded();
+  }
 
   //retrieve artwork from Artworkroute
 getArtworkFromServer(){
@@ -60,7 +62,6 @@ goToAuthorDetail(event){
 
 
   render() {
-    this.isAuthorloaded();
     var that = this;
     return(
       <div>

@@ -34,6 +34,12 @@ class AuthorProfile extends Component {
   this.getAllArtworkFromServer();
 
   };
+
+
+  async componentDidUpdate(){
+    this.isAuthorloaded();
+    this.isArtworkloaded();
+  }
 //------------------------- Author Details loading ----------------------
 // retrieve artwork from Artworkroute
 getAuthorFromServer(){
@@ -115,8 +121,7 @@ getAuthorFromServer(){
 
 
   render() {
-    this.isAuthorloaded();
-    this.isArtworkloaded();
+
     var that = this;
     let $AuthorDetails = null;
     let author = this.state.authorDetails.name;

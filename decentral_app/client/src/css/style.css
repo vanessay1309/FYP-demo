@@ -119,9 +119,9 @@ html,body{
 }
 .header-text h2 span {color: #d92cf9;}
 .header-text p {
-    color: #fff;
+    color: #black;
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 500;
     text-transform: uppercase;
     margin: 30px 0 60px;
     letter-spacing: 1px;
@@ -596,9 +596,8 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 }
 .image-tree{
   display: flex;
-  margin-right: 20px;
-  margin-left: 20%
-
+  justify-content: flex-end;
+  margin:5px 50px;
 }
 .image-tree img{
   width: 50px;
@@ -610,7 +609,19 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 .image-tree img:hover{
    transform: scale(1.2);
  }
-
+ #sourceList{
+    margin-right: auto;
+ }
+ #derivativeList{
+   margin-left: auto;
+ }
+.details{
+  padding-bottom :20px;
+}
+#Sourceimage_preview{
+  margin:-50px;
+  transform: scale(0.6);
+}
 /* media size change - screen adjustment */
 
   @media screen and (max-width: 800px) {

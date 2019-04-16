@@ -46,7 +46,9 @@ class App extends Component {
           accounts: null,
           contract: null,
           isSignedIn:false,
-          login_msg: null
+          login_msg: null,
+          isLoggedin:true,
+          isRegistered:false
       };
 
   }
@@ -87,8 +89,10 @@ class App extends Component {
 
     }
   }
-
-    isSignedIn(){
+  async componentDidUpdate(){
+          this.checkUserlogin();
+  }
+  isSignedIn(){
       console.log("isSignedIn :")
       let login_URL = "http://localhost:4000/users/login";
       // fetch(login_URL).then{
@@ -108,14 +112,16 @@ class App extends Component {
     //  this.setState({isSignedIn:false});
     if (this.state.login_msg == "rm")
       console.log("meta mask is not logged in");
-    // if (this.state.login_msg == "rr")
+     if (this.state.login_msg == "success"){
+       this.setState({isLoggedin:true});
+     }
 
   }
 
 
 
   render() {
-      this.checkUserlogin();
+
     //check the user have an account by logging in to the metamask
     //this.isSignedIn();
     return (
@@ -139,11 +145,12 @@ class App extends Component {
               <Route exact path={"/"} component={Home} />
 
                 <Route path={"/about"} component={About}/>
-                <Route exact path={"/featured"} component={Featured} />
+                <Route path={"/featured"} component={Featured} />
                 <Route path={"/gallery"} component={Gallery}/>
                 <Route path={"/upload"} component={Upload}/>
                 <Route path={"/author"} component={Author}/>
-                <Route path={"/artworks/:name/details"} component={ArtworkDetails}/>
+                <Route exact path={"/artworks/:name/details"} component={ArtworkDetails}/>
+
                 <Route path={"/:name/profile"} component={AuthorProfile}/>
                 <Route path={"/signin"} component={SignInForm}/>
               </Switch>

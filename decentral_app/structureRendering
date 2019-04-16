@@ -1,0 +1,28 @@
+
+
+
+index.js
+  - App.js    -> style.css App.css
+
+    - /componenets/NavBar.js
+
+      ../pages/
+        - Home.js  //default routing
+          -/componenets/Header.js
+            -Banner.js
+
+        - About.js
+
+        - Featured.js
+
+        - Gallery.js
+          - ArtworkDetails.js
+            - itself  // re rendering
+
+        - Author.js
+          - AuthorProfile.js
+
+        - Upload.js
+          - /components/UploadButton.js
+
+        - SignIn.js
