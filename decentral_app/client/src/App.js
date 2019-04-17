@@ -69,7 +69,6 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-      alert("my account is:"+accounts[0]);
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
@@ -82,6 +81,7 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts:accounts, contract: instance });
+      window.sessionStorage.setItem("wallet",this.state.accounts[0]);
       // check sign in state
       // this.isSignedIn();
       await  this.getUserInfo();
@@ -147,10 +147,11 @@ checkUserLogin(data){
          user_id:user_id,
          name:user_name
        });
-       window.sessionStorage.setItem("uid",this.state.user_id);
-       window.sessionStorage.setItem("wallet",this.state.accounts[0]);
+
 
      }
+     window.sessionStorage.setItem("uid",this.state.user_id);
+
 
   }
 

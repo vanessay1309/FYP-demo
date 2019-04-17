@@ -30,7 +30,8 @@ class NaviBar extends Component {
         <li>< NavLink  activeClassName="current" to='/author'>Author</NavLink></li>
         {this.props.isMember && <li>< NavLink  activeClassName="current" to='/upload'>Upload Artwork</ NavLink></li>
         }
-        <li> < NavLink  activeClassName="current" to='/signin' > Login/Sign In </ NavLink></li>
+        {!this.props.isMember&&<li> < NavLink  activeClassName="current" to='/signin' > Login/Sign In </ NavLink></li>
+        }
       </ul>
 
 
