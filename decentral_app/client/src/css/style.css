@@ -631,7 +631,9 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
       display: inline-block;
   }
 }
-
+.AuthorDetails img{
+  max-width: 200px;
+}
 /* media size change - screen adjustment */
 
   @media screen and (max-width: 800px) {
