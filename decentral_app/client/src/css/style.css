@@ -95,6 +95,7 @@ html,body{
     justify-content: center;
     position:relative;
     background:url(../images/welcome-banner.jpg)no-repeat;
+    /* opacity:0.5; */
     background-size:cover;
     background-position: center;
     height:300px;
@@ -104,14 +105,14 @@ html,body{
     content: " ";
     top:0;
     left:0;
-    background:rgba(31,44,108,.0);
+    background:rgba(31,44,108,0);
     width:100%;
     height:100%;
 }
 
 /*.header-text-area*/
 .header-text h2 {
-    color: #fff;
+    color: white;
     font-size: 54px;
     font-weight: 700;
     text-transform: uppercase;
@@ -119,7 +120,7 @@ html,body{
 }
 .header-text h2 span {color: #d92cf9;}
 .header-text p {
-    color: #black;
+    color: white;
     font-size: 20px;
     font-weight: 500;
     text-transform: uppercase;
@@ -641,7 +642,20 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 .AuthorDetails img{
   max-width: 200px;
 }
+#Hcontent {
+  padding: 50px 0 30px;
+    background-color:rgba(0, 0, 0, 0.3);
+  background:url(../images/88247.jpg)no-repeat;
+  /* opacity: 10; */
+  background-size:cover;
+  width : 100%;
+  height: 100%;
+  text-align: center;
 
+}
+.Home #content{
+  padding:10px;
+}
 .About {
   padding: 50px 0 30px;
     background-color:rgba(0, 0, 0, 0.3);
@@ -687,6 +701,10 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
   bottom: 0;
   width: 100%;
   height: 0rem;            /* Footer height */
+}
+.Home #flow{
+  height: 550px;
+  width: 150px;
 }
 /* media size change - screen adjustment */
 
