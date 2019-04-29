@@ -221,13 +221,7 @@ async  Register(){
             </label>
             <textarea id = "bio" type="text" cols="20" rows="5" placeholder="type bio here.." value={this.state.bio} onChange={this.handleBioChange} required/>
           </div>
-          <div id="avatar">
-            <label for="avatar">
-            Avatar:
-            </label>
-            <input id="avatar" type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} />
-              {$imagePreview}
-          </div>
+
           <button onClick={this.Register}>Submit</button>
       </div>
 

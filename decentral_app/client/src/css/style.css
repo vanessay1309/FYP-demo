@@ -388,12 +388,14 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
   /* navigation bar style */
   #navbar{
     height: 50px;
-    padding:10px 0 50px 0;
+    padding:10px 0 60px 0;
     margin-bottom: 10px;
     font-size: 20px;
-    position:sticky;
-    top: 5px;
+    position: sticky;
+    top: 0px;
+    z-index:1;
     background: white;
+
   }
   #navbar li:hover{
 
@@ -625,14 +627,66 @@ span.single-timeline-horizontal.spacial-horizontal-line {width: 88px;}
 .signIn {
   body {
       padding:20px;
+
       text-align: center;
   }
   div {
       display: inline-block;
+      margin:50px;
   }
+}
+.signIn{
+    font-size: 20px;
 }
 .AuthorDetails img{
   max-width: 200px;
+}
+
+.About {
+  padding: 50px 0 30px;
+    background-color:rgba(0, 0, 0, 0.3);
+  background:url(../images/87399.jpg)no-repeat;
+  /* opacity: 10; */
+  background-size:cover;
+  width : 100%;
+  height: 100%;
+  text-align: center;
+
+}
+.About #conceptS img{
+  max-width : 800px;
+  text-align:  center;
+
+}
+.About h1{
+  font-size: 25px;
+  padding-bottom: 10px;
+    color:white;
+
+}
+.About p{
+  font-size: 20px;
+    color:white;
+
+}
+.Container{
+  /* padding-top: 25px; */
+  position: relative;
+  min-height: 100vh;
+
+}
+.About section{
+  padding:20px;
+  margin:50px;
+}
+.Content-wrap {
+  padding-bottom: 2rem;    /* Footer height */
+}
+.Footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0rem;            /* Footer height */
 }
 /* media size change - screen adjustment */
 

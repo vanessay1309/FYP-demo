@@ -163,7 +163,7 @@ checkUserLogin(data){
 
       <div className="App">
         <link rel="stylesheet" href="css/style.css"/>
-        <div className="w3-content" style={{ paddingBottom:'80px'}}>
+
 
           <BrowserRouter>
           <div className="w3-panel w3-center w3-opacity" >
@@ -174,7 +174,8 @@ checkUserLogin(data){
 
           <NavBar isMember={this.state.isMember}/>
 
-                <div className="Container">
+          <div className="Container">
+            <div className = "Content-wrap">
             <Switch>
 
               <Route exact path={"/"} component={Home} />
@@ -189,13 +190,19 @@ checkUserLogin(data){
                 <Route path={"/:name/profile"} component={AuthorProfile}/>
                 <Route path={"/signin"} component={SignInForm}/>
               </Switch>
+
                 </div>
-          </BrowserRouter>
+
           <div className="footer-account">
             <p id="accountAddress" className="text-center" alt="account">account : {this.state.accounts}</p>
           </div>
-
-        </div>
+          <div className="Footer">
+          <hr/>
+            &copy; Agora @ 2019
+          </div>
+          </div>
+            </BrowserRouter>
+  
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/web3.min.js"></script>

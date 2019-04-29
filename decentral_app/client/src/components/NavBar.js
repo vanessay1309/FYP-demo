@@ -19,7 +19,7 @@ class NaviBar extends Component {
   {
     return(
       <div id="navbar">
-      <nav>
+      <nav className="navbar-fixed-top">
 
       Navigation Bar
 

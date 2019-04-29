@@ -317,11 +317,7 @@ async  Upload(){
                 <textarea id = "caption" type="text" cols="20" rows="5" placeholder="type caption here.." value={this.state.img_caption} onChange={this.handleCaptionChange} required/>
               </div>
 
-              <br/>
-              <input type='file' id="imgInput" accept=".jpg,.jpeg,.png"  onChange={ this.handleImageAddressInput} />
-              <br/>
-              {$imagePreview}
-              <br/>
+
               <div id="Source">
                 <label for="Source_List"> Source List:</label>
                 <select id="Source_List" onChange={this.selectHandler}>
